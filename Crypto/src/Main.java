@@ -1,6 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
-
 
 
 public class Main {
@@ -15,5 +13,23 @@ public class Main {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        System.out.println(Cryptography.sha256("Apple"));
+        User Alfred = new User();
+        System.out.println("----------------------------------------------");
+        User Allice = new User();
+        try {
+            Thread.sleep(2000);
+
+        }
+        catch (Exception e)
+        {
+
+        }
+
+        System.out.println("----------------------------------------------");
+        User Allice3 = new User();
+
+
     }
 }

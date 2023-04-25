@@ -20,9 +20,9 @@ public class Window extends JComponent{
     private int strokeSize = 3;
 
     private  int widthScale = 15;
+
     public Window()
     {
-
         Random rand = new Random();
 
         button1.addActionListener(new ActionListener() {
@@ -58,6 +58,7 @@ public class Window extends JComponent{
                     try
                     {
                         TimeUnit.MILLISECONDS.sleep(500);
+                        //Thread.sleep(1000);
                     }
                     catch (Exception exception)
                     {
