@@ -11,6 +11,7 @@ public class Miner extends User
         rand = new Random();
         miningPower = minPower + rand.nextInt(maxPower-minPower); // -> generate a random number between minPower and maxPower
         //Update();
+        Network.getInstance().JoinMinerToTheNetwork(this);
     }
 
     private void Update()
@@ -29,7 +30,7 @@ public class Miner extends User
 
     private void TryToMine()
     {
-        //we get the data from the datamanager
+        //we get the data from the network
 
         //we add a transaction to it where we get some amount of coin
 

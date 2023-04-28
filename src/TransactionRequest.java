@@ -1,22 +1,41 @@
-public class TransactionRequest implements Comparable<TransactionRequest>
+public class TransactionRequest
+{
+    public float tradeAmount;
+
+    public TransactionRequest(float tradeAmount)
+    {
+        this.tradeAmount = tradeAmount;
+    }
+
+}
+
+class BuyingRequest extends TransactionRequest
+{
+    public Trader trader;
+
+    public BuyingRequest(Trader trader, float tradeAmount)
+    {
+        super(tradeAmount);
+        this.trader = trader;
+    }
+
+}
+
+class SellingRequest extends TransactionRequest implements Comparable<SellingRequest>
 {
     public User user;
-    public String publicKey;
-    public TransactionType type;
-    public float tradeAmount;
     public float transactionFee;
 
-    public TransactionRequest(User user, String publicKey, TransactionType type, float tradeAmount, float transactionFee)
+    public SellingRequest(User user, float tradeAmount, float transactionFee)
     {
+        super(tradeAmount);
         this.user = user;
-        this.publicKey = publicKey;
-        this.type = type;
-        this.tradeAmount = tradeAmount;
         this.transactionFee = transactionFee;
     }
 
     @Override
-    public int compareTo(TransactionRequest request) {
+    public int compareTo(SellingRequest request)
+    {
 
         if (request.transactionFee > this.transactionFee)
         {

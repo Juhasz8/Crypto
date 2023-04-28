@@ -1,7 +1,8 @@
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
+
 
 //should also have a type REWARD, which is used by the miners
 enum TransactionType { BUY, SELL, REWARD }
@@ -12,19 +13,41 @@ enum TransactionType { BUY, SELL, REWARD }
 public class Network
 {
 
-    public static Network instance;
-    private ArrayList<TransactionRequest> sellingRequests = new ArrayList<>();
-    private ArrayList<TransactionRequest> buyingRequests = new ArrayList<>();
+    private static Network instance;
+    private ArrayList<SellingRequest> sellingRequests = new ArrayList<>();
+    private ArrayList<BuyingRequest> buyingRequests = new ArrayList<>();
 
     private ArrayList<TransactionMatch> matches = new ArrayList<>();
 
     private float minerReward = 5;
 
-    private ArrayList<User> users = new ArrayList<>();
+    private ArrayList<Miner> miners = new ArrayList<>();
+    private ArrayList<Trader> traders = new ArrayList<>();
+
+    // an array of random names
+    private String[] names = new String[] { "Alfred", "Bob", "Steve" };
+    private int[] amountOfUsedNames = new int[3];
+
+    private Random rand = new Random();
 
     private Network()
     {
-        
+        for(int i = 0; i < amountOfUsedNames.length; i++)
+        {
+            amountOfUsedNames[i] = 0;
+        }
+    }
+
+    public String GetNewRandomUserName()
+    {
+        int index = rand.nextInt(names.length);
+        String name = names[index];
+        amountOfUsedNames[index]++;
+
+        if(amountOfUsedNames[index] > 1)
+            name += " " + amountOfUsedNames[index];
+
+        return name;
     }
 
     private void TryToMatch()
@@ -41,28 +64,77 @@ public class Network
         {
             //System.out.println("REQ: " + request.user + request.tradeAmount + " " + request.transactionFee );
 
-            TransactionMatch match;
-            if(sellingRequests.get(0).tradeAmount > buyingRequests.get(0).tradeAmount)
+            User seller = sellingRequests.get(0).user;
+            Trader trader = buyingRequests.get(0).trader;
+
+            TransactionMatch match = GetMatch(seller, trader);
+
+            byte[] originalMessage = Convert(match);
+            //convert the match into an array of bits, and pass these bytes and the publicKey of the buyer to the seller to sign
+            byte[] signedMessage = seller.Sign(originalMessage);
+
+            //ask for the verification of the trader for the signed transaction
+            if(trader.VerifySignedMessage(originalMessage, signedMessage, seller.publicKey))
             {
-                match = new TransactionMatch(sellingRequests.get(0).user, buyingRequests.get(0).user, buyingRequests.get(0).tradeAmount);
-                sellingRequests.get(0).tradeAmount -= buyingRequests.get(0).tradeAmount;
-                buyingRequests.remove(0);
-            }
-            else if(sellingRequests.get(0).tradeAmount < buyingRequests.get(0).tradeAmount)
-            {
-                match = new TransactionMatch(sellingRequests.get(0).user, buyingRequests.get(0).user, sellingRequests.get(0).tradeAmount);
-                buyingRequests.get(0).tradeAmount -= sellingRequests.get(0).tradeAmount;
-                sellingRequests.remove(0);
+                //pass the message to the miners
+
+                System.out.println("VERIFIED MATCH: " + seller.name + " sends " + match.amount + " puffs to "+ trader.name);
+                matches.add(match);
             }
             else
             {
-                match = new TransactionMatch(sellingRequests.get(0).user, buyingRequests.get(0).user, sellingRequests.get(0).tradeAmount);
-                buyingRequests.remove(0);
-                sellingRequests.remove(0);
+                System.out.println("The Buyer didnt verify the Transaction! ");
             }
-            System.out.println("MATCH: from: " + match.fromUser.publicKeyString + " to: " + match.toUser.publicKeyString + " amount: " + match.amount);
-            matches.add(match);
+
+            AdjustRequests();
         }
+    }
+
+    private TransactionMatch GetMatch(User seller, Trader trader)
+    {
+        //the seller sells more
+        if(sellingRequests.get(0).tradeAmount > buyingRequests.get(0).tradeAmount)
+            return new TransactionMatch(seller.publicKeyString, trader.publicKeyString, buyingRequests.get(0).tradeAmount);
+        else
+            return new TransactionMatch(seller.publicKeyString, trader.publicKeyString, sellingRequests.get(0).tradeAmount);
+    }
+
+    private void AdjustRequests()
+    {
+        if(sellingRequests.get(0).tradeAmount > buyingRequests.get(0).tradeAmount)
+        {
+            sellingRequests.get(0).tradeAmount -= buyingRequests.get(0).tradeAmount;
+            buyingRequests.remove(0);
+        }
+        else
+        {
+            buyingRequests.get(0).tradeAmount -= sellingRequests.get(0).tradeAmount;
+            if(buyingRequests.get(0).tradeAmount == 0)
+                buyingRequests.remove(0);
+
+            sellingRequests.remove(0);
+        }
+    }
+
+    private byte[] Convert(TransactionMatch match)
+    {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
+
+        try
+        {
+            dos.write(match.fromPublicKey.getBytes());
+            dos.write(match.toPublicKey.getBytes());
+            dos.writeFloat(match.amount);
+
+            dos.flush();
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+
+        return bos.toByteArray();
     }
 
     public static Network getInstance()
@@ -73,29 +145,30 @@ public class Network
         return instance;
     }
 
-    public void ProcessRequest(TransactionRequest request)
+    public void ProcessBuyingRequest(BuyingRequest request)
     {
-        if(request.type == TransactionType.SELL)
-            sellingRequests.add(request);
-        else if (request.type == TransactionType.BUY)
-            buyingRequests.add(request);
-
+        buyingRequests.add(request);
         TryToMatch();
     }
 
-    public void ProcessSignedMessage(byte[] signedMessage, PublicKey sellerPublicKey)
+    public void ProcessSellingRequest(SellingRequest request)
     {
-
+        sellingRequests.add(request);
+        TryToMatch();
     }
-    //we need a method for getting the final ledger
 
     public float GetMinerRewardAmount()
     {
         return minerReward;
     }
 
-    public void JoinNetwork(User user)
+    public void JoinMinerToTheNetwork(Miner miner)
     {
-        users.add(user);
+        miners.add(miner);
+    }
+
+    public void JoinTraderToTheNetwork(Trader trader)
+    {
+        traders.add(trader);
     }
 }

@@ -18,23 +18,30 @@ public class Main {
         System.out.println("----------------------------------------------");
 
 
-        Miner Alfred = new Miner(20, 50);
-        Alfred.IncreaseWallet(25);
-        Alfred.SellRequest(10, 2);
+        Miner miner1 = new Miner(20, 50);
+        System.out.println("name: " + miner1.name);
+        miner1.IncreaseWallet(25);
+        miner1.RequestToSell(10, 2);
 
         System.out.println("----------------------------------------------");
 
-        Trader Jack = new Trader();
-        Jack.IncreaseWallet(10);
-        Jack.BuyingRequest(35);
+        Trader trader1 = new Trader();
+        System.out.println("name: " + trader1.name);
+        trader1.IncreaseWallet(10);
+        trader1.RequestToBuy(35);
 
         System.out.println("----------------------------------------------");
 
-        Trader Bob = new Trader();
-        Bob.IncreaseWallet(500);
-        Bob.SellRequest(100, 4);
+        Trader trader2 = new Trader();
+        System.out.println("name: " + trader2.name);
+        trader2.IncreaseWallet(500);
+        trader2.RequestToSell(100, 4);
 
 
+
+        // for later:
+        // random name generator
+        //
 
     }
 }

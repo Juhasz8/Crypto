@@ -3,6 +3,8 @@ import java.util.Base64;
 
 public class User
 {
+
+    public String name;
     //these three could be in its own wallet class
     public String publicKeyString;
     private String privateKeyString;
@@ -36,13 +38,13 @@ public class User
             //System.out.println("Keys generated -> public: " + encoder.encodeToString(publicKey.getEncoded()) + " size: "+ encoder.encodeToString(publicKey.getEncoded()).length() + " private: " + encoder.encodeToString(privKey.getEncoded()) );
             publicKeyString = encoder.encodeToString(publicKey.getEncoded());
             privateKeyString = encoder.encodeToString(privateKey.getEncoded());
-
-            Network.getInstance().JoinNetwork(this);
         }
         catch (Exception e)
         {
             System.out.println("Keys couldnt be created: " + e);
         }
+
+        name = Network.getInstance().GetNewRandomUserName();
     }
 
     //this is called whenever the transaction is verified
@@ -56,15 +58,16 @@ public class User
         return wallet;
     }
 
-    public void SellRequest(float amount, float fee)
+    public void RequestToSell(float amount, float fee)
     {
         if(wallet < amount)
             return;
 
-        TransactionRequest request = new TransactionRequest(this, publicKeyString, TransactionType.SELL, amount, fee);
+        //TransactionRequest request = new TransactionRequest(this, publicKeyString, TransactionType.SELL, amount, fee);
+        SellingRequest request = new SellingRequest(this, amount, fee);
         try
         {
-            Network.getInstance().ProcessRequest(request);
+            Network.getInstance().ProcessSellingRequest(request);
         }
         catch (Exception e)
         {
@@ -72,7 +75,7 @@ public class User
         }
     }
 
-    public void Sign(String buyerPublicKey, byte[] message)
+    public byte[] Sign(byte[] message)
     {
         try
         {
@@ -81,14 +84,14 @@ public class User
 
             signature.update(message);
 
-            //byte[] messageBytes = Files.readAllBytes(Paths.get("message.txt"));
-            byte[] digitalSignature = signature.sign();
-
+            return signature.sign();
         }
         catch (Exception e)
         {
-            System.out.println(e);
+            System.out.println("Signing failed: " + e);
         }
 
+        System.out.println("Seller didnt sign the Transaction! ");
+        return null;
     }
 }
