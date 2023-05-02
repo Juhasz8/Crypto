@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="ikonli-core-2.4.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/jar_files/ikonli-core-2.4.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/jar_files/ikonli-javafx-2.4.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
