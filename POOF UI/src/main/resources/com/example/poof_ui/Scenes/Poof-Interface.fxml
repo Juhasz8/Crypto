@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #1e1f22;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.poof_ui.PoofController">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #1e1f22;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.poof_ui.Creative_Side.PoofController">
    <children>
       <GridPane alignment="CENTER" style="-fx-background-color: #1e1f22;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -46,7 +46,7 @@
                            <graphic>
                               <ImageView fx:id="play_image" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@play_button.png" />
+                                    <Image url="@../Image_Files/play_button.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -55,7 +55,7 @@
                            <graphic>
                               <ImageView fx:id="restart_image" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@restart_button.png" />
+                                    <Image url="@../Image_Files/restart_button.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -236,7 +236,7 @@
                                              <children>
                                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@Poof_IconWhite_1.png" />
+                                                      <Image url="@../Image_Files/Poof_IconWhite_1.png" />
                                                    </image>
                                                 </ImageView>
                                                 <Label text="Poof Coin (POOF)" textFill="WHITE">
@@ -357,7 +357,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@home_icon.png" />
+                        <Image url="@../Image_Files/home_icon.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -377,7 +377,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@graphview_icon.png" />
+                        <Image url="@../Image_Files/graphview_icon.png" />
                      </image>
                   </ImageView>
                </graphic>

@@ -1,4 +1,4 @@
-package com.example.poof_ui;
+package com.example.poof_ui.Blockchain_Side;
 
 import java.security.PublicKey;
 import java.security.Signature;

@@ -1,4 +1,4 @@
-package com.example.poof_ui;
+package com.example.poof_ui.Blockchain_Side;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

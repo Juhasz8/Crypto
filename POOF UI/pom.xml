@@ -60,7 +60,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.example.poof_ui/com.example.poof_ui.HelloApplication</mainClass>
+                            <mainClass>com.example.poof_ui/com.example.poof_ui.Blockchain_Side.HelloApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
