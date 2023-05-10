@@ -21,6 +21,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -72,6 +73,7 @@ public class PoofController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+
         // Initialize chart data
         series1 = new XYChart.Series();
         lineChart.getData().addAll(series1);
@@ -120,11 +122,10 @@ public class PoofController implements Initializable {
             // Scroll the chart to the right to show the latest data point
             chartScroll.setHvalue(1);
 
-            // Create something
-            Image image = new Image(getClass().getResourceAsStream("chainblock.png"));
-            ImageView myImage = new ImageView(image);
-            // Add it to the blockchainTile TilePane
-            blockchain_Tile.getChildren().add(myImage);
+            // Add transaction blocks
+            TransactionBlock myComponent = new TransactionBlock();
+            blockchain_Tile.getChildren().add(myComponent);
+
         }));
 
         // Set the timeline to repeat 500 times (10 minutes)
@@ -133,6 +134,9 @@ public class PoofController implements Initializable {
         // Initialize UI elements
         graphViewScroll.setHvalue(0.5);
         graphViewScroll.setVvalue(0.5);
+
+
+
     }
     // Change image on the play button
     @FXML
