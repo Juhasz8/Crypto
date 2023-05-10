@@ -2,23 +2,17 @@ package com.example.poof_ui;
 
 // Imports
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.animation.KeyFrame;
-import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
-import javafx.css.Size;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
@@ -27,10 +21,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -80,11 +71,6 @@ public class PoofController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Rotate the chain_Wrapper
-        //RotateTransition rotateTransition = new RotateTransition(Duration.seconds(20), chain_Wrapper);
-        //rotateTransition.setByAngle(360);
-        //rotateTransition.setCycleCount(Timeline.INDEFINITE);
-        //rotateTransition.play();
 
         // Initialize chart data
         series1 = new XYChart.Series();
@@ -134,7 +120,7 @@ public class PoofController implements Initializable {
             // Scroll the chart to the right to show the latest data point
             chartScroll.setHvalue(1);
 
-            // Create something hahaha
+            // Create something
             Image image = new Image(getClass().getResourceAsStream("chainblock.png"));
             ImageView myImage = new ImageView(image);
             // Add it to the blockchainTile TilePane
