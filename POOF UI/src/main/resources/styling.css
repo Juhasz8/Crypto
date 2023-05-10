@@ -1,23 +1,23 @@
 // Tabs Styling
 
 // For each element, set the following:
-// - primary color to #001845
-// - secondary color to #0466c8
+// - primary color to Light Grey #001845
+// - secondary color to Blue: #0466c8
 // - focus color to secondary color
 * {
-	-fx-primary-color: #001845;
-	-fx-secondary-color: #0466c8;
+	-fx-primary-color: #2a2d30;
+	-fx-secondary-color: #3474f0;
 	-fx-focus-color: -fx-secondary-color;
 }
 
 // Set the following styles for the tab header area:
 // - background color to primary color
 // - border color to secondary color
-// - border width to 2 pixels on top and bottom, 0 pixels on left and right
+// - border width to 1 pixels on top
 .tab-header-area .tab-header-background {
 	-fx-background-color: -fx-primary-color;
-	-fx-border-color: -fx-secondary-color;
-	-fx-border-width: 2 0 2 0;
+	-fx-border-color:  #1e1f22;
+	-fx-border-width: 1 0 0 0;
 }
 
 // Set the following styles for the selected tab:
@@ -100,13 +100,17 @@
 }
 
 // Set the following style for the button with the ID "buttonBuy":
-// - background color of #73B902
+// - background color of #4FCB59
 #buttonBuy {
-	-fx-background-color: #73B902;
+	-fx-background-color: #4FCB59;
 }
 
 #buttonSell {
-    -fx-background-color: #EF3639;
+    -fx-background-color: #ff5e57;
+}
+
+#play_button, #restart_button {
+    -fx-background-color: transparent;
 }
 
 
@@ -130,7 +134,7 @@
 // Scroll Pane
 
 .scroll-pane {
-    -fx-background-color: #transparent; /* Set background color */
+    -fx-background-color: transparent; /* Set background color */
 }
 
 .scroll-pane > .viewport {

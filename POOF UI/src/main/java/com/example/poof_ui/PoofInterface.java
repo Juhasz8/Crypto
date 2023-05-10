@@ -16,17 +16,8 @@ public class PoofInterface extends Application{
         // Load the FXML file
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Poof-Interface.fxml"));
 
-        // Create the controller
-        PoofController controller = new PoofController();
-
-        // Set the controller for the loader
-        loader.setController(controller);
-
         // Load the root node from the FXML file
         Parent root = loader.load();
-
-        // Set the stage for the controller
-        controller.setStage(stage);
 
         // Create a new scene with the root node
         Scene scene = new Scene(root);
@@ -36,7 +27,6 @@ public class PoofInterface extends Application{
 
         // Set the scene for the stage
         stage.setScene(scene);
-
         // Show the stage
         stage.show();
     }
