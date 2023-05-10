@@ -1,8 +1,6 @@
 package com.example.poof_ui;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Circle;
 
 public class TransactionBlock extends AnchorPane {
 
