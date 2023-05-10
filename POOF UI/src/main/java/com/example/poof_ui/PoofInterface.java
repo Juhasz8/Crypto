@@ -1,4 +1,4 @@
-package com.example.poof_ui.Creative_Side;
+package com.example.poof_ui;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
