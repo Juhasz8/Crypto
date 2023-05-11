@@ -21,8 +21,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -35,6 +37,8 @@ public class PoofController implements Initializable {
     private Label label_Weeks;
     @FXML
     private Label label_Months;
+    @FXML
+        private VBox currentEvents;
     @FXML
     private Tab graphView;
     @FXML
@@ -123,8 +127,12 @@ public class PoofController implements Initializable {
             chartScroll.setHvalue(1);
 
             // Add transaction blocks
-            TransactionBlock myComponent = new TransactionBlock();
-            blockchain_Tile.getChildren().add(myComponent);
+            TransactionBlock transactionBlock = new TransactionBlock();
+            blockchain_Tile.getChildren().add(transactionBlock);
+
+            // Add a CurrentEvent
+            CurrentEvent currentEvent = new CurrentEvent();
+            currentEvents.getChildren().add(currentEvent);
 
         }));
 

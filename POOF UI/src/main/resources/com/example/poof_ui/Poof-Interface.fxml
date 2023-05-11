@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #1e1f22;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.poof_ui.PoofController">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #1e1f22;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.poof_ui.PoofController">
    <children>
       <GridPane alignment="CENTER" style="-fx-background-color: #1e1f22;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -298,7 +298,7 @@
                                     </VBox>
                                     <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #2a2d30;" GridPane.rowIndex="6" GridPane.rowSpan="2147483647">
                                        <children>
-                                          <GridPane style="-fx-background-color: #42454a;">
+                                          <GridPane prefHeight="50.0" style="-fx-background-color: #42454a;" VBox.vgrow="SOMETIMES">
                                              <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -318,6 +318,18 @@
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </padding>
                                           </GridPane>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="285.0" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                             <content>
+                                                <VBox fx:id="currentEvents" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </content>
+                                          </ScrollPane>
                                        </children>
                                     </VBox>
                                  </children>
