@@ -5,7 +5,7 @@ import javafx.scene.layout.AnchorPane;
 public class TransactionBlock extends AnchorPane {
 
     public TransactionBlock() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TransactionBlock.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXML/TransactionBlock.fxml"));
         fxmlLoader.setController(this);
 
         try {

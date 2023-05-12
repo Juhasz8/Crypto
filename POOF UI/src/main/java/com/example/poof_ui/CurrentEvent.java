@@ -6,7 +6,7 @@ import javafx.scene.layout.AnchorPane;
 public class CurrentEvent extends AnchorPane{
 
     public CurrentEvent() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CurrentEvent.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXML/CurrentEvent.fxml"));
         fxmlLoader.setController(this);
 
         try {

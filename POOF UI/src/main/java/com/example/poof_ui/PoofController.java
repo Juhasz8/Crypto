@@ -4,9 +4,7 @@ package com.example.poof_ui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -21,8 +19,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -38,9 +34,11 @@ public class PoofController implements Initializable {
     @FXML
     private Label label_Months;
     @FXML
-        private VBox currentEvents;
+    private VBox currentEvents;
     @FXML
     private Tab graphView;
+    @FXML
+    private ScrollPane currentEventsScroll;
     @FXML
     private Button buttonBuy;
     @FXML
@@ -60,6 +58,10 @@ public class PoofController implements Initializable {
 
     @FXML
     private TilePane blockchain_Tile;
+    @FXML
+    private TilePane tradersTile;
+    @FXML
+    private TilePane minersTile;
 
     // Chart data
     private XYChart.Series series1;
@@ -73,6 +75,22 @@ public class PoofController implements Initializable {
     int yearsPassed = 0;
     int monthsPassed = 0;
     int weeksPassed = 0;
+
+    //List of profile pictures
+    List<String> profilePictures = Arrays.asList(
+            "ProfileImages/DaliMask.png"
+            ,"ProfileImages/Mario.png"
+            ,"ProfileImages/NinjaTurtle.png"
+            ,"ProfileImages/PeterParker.png"
+            ,"ProfileImages/RickSanchez.png"
+            ,"ProfileImages/Sonic.png"
+            ,"ProfileImages/Stitch.png"
+            ,"ProfileImages/StormTrooper.png"
+            ,"ProfileImages/Tom.png"
+            ,"ProfileImages/WalterWhite.png"
+    );
+    // create an object of Random class
+    Random random = new Random();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -134,6 +152,25 @@ public class PoofController implements Initializable {
             CurrentEvent currentEvent = new CurrentEvent();
             currentEvents.getChildren().add(currentEvent);
 
+            // Add traders
+            TraderGUI traderGUI = new TraderGUI();
+            tradersTile.getChildren().add(traderGUI);
+            // Add trader's Profile Picture
+            int randomTraderProfilePicture = random.nextInt(10);
+            String currentTraderProfilePic = profilePictures.get(randomTraderProfilePicture);
+            Image traderProfilePicture = new Image(getClass().getResourceAsStream((String) currentTraderProfilePic));
+            traderGUI.setProfilePicture(traderProfilePicture);
+
+            // Add miners
+            MinerGUI minerGUI = new MinerGUI();
+            minersTile.getChildren().add(minerGUI);
+
+            // Add miner's Profile Picture
+            int randomMinerProfilePicture = random.nextInt(10);
+            String currentMinerProfilePic = profilePictures.get(randomMinerProfilePicture);
+            Image minerProfilePicture = new Image(getClass().getResourceAsStream((String) currentMinerProfilePic));
+            minerGUI.setProfilePicture(minerProfilePicture);
+
         }));
 
         // Set the timeline to repeat 500 times (10 minutes)
@@ -151,13 +188,13 @@ public class PoofController implements Initializable {
     void startTimeline(ActionEvent event) {
         if (isPlaying) {
             // Change the image back to the play button
-            Image playButton = new Image(getClass().getResourceAsStream("play_button.png"));
+            Image playButton = new Image(getClass().getResourceAsStream("Icons/play_button.png"));
             play_image.setImage(playButton);
             // Stop the timeline
             timeline.stop();
         } else {
             // Change the image to the pause button
-            Image pauseButton = new Image(getClass().getResourceAsStream("pause_button.png"));
+            Image pauseButton = new Image(getClass().getResourceAsStream("Icons/pause_button.png"));
             play_image.setImage(pauseButton);
             // Start the timeline
             timeline.play();
