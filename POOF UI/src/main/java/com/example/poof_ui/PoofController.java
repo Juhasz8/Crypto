@@ -149,8 +149,8 @@ public class PoofController implements Initializable {
             blockchain_Tile.getChildren().add(transactionBlock);
 
             // Add a CurrentEvent
-            CurrentEvent currentEvent = new CurrentEvent();
-            currentEvents.getChildren().add(currentEvent);
+            CurrentEventManager currentEvent = new CurrentEventManager();
+            currentEvents.getChildren().add(currentEvent.getEvent());
 
             // Add traders
             TraderGUI traderGUI = new TraderGUI();

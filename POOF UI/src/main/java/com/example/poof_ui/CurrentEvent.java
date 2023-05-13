@@ -5,10 +5,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
+public class CurrentEvent extends AnchorPane {
+    private String eventName;
+    private double probability;
 
-public class CurrentEvent extends AnchorPane{
+    public CurrentEvent(String eventName, double probability) {
+        this.eventName = eventName;
+        this.probability = probability;
 
-    public CurrentEvent() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXML/CurrentEvent.fxml"));
         fxmlLoader.setController(this);
 
@@ -19,9 +23,16 @@ public class CurrentEvent extends AnchorPane{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        currentEventName.setText("Pyramids");
     }
 
     @FXML
     private Label currentEventName;
+
+    public void initialize() {
+        currentEventName.setText(eventName);
+    }
+
+    public double getProbability() {
+        return probability;
+    }
 }
