@@ -9,7 +9,7 @@
    <children>
       <Label fx:id="currentEventName" alignment="CENTER" contentDisplay="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <font>
-            <Font name="Arial Bold" size="18.0" />
+            <Font name="Arial Bold" size="12.0" />
          </font>
       </Label>
    </children>
