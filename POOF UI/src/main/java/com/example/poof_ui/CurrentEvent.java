@@ -1,7 +1,10 @@
 package com.example.poof_ui;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+
 
 public class CurrentEvent extends AnchorPane{
 
@@ -16,5 +19,9 @@ public class CurrentEvent extends AnchorPane{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        currentEventName.setText("Pyramids");
     }
+
+    @FXML
+    private Label currentEventName;
 }

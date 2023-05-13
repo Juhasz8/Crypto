@@ -8,7 +8,7 @@ This is the to do list for the Creative Side.
     - Connect the traders to the transaction blocks so a transaction block will appear when a transaction is happening.
       The line should be blue when active, green when succeeded, red when failed.
 
-· Create the list of current events (20) with their properties [NOT DONE] Assigned to: ******
+· Create the list of current events (20) with their properties [NOT DONE] Assigned to: Diego
     - Properties: Probability, Maximum Repetition over the course of Week, Month, Year...
 
 · Create the PersonalWallet class [NOT DONE] Assigned to: ******
