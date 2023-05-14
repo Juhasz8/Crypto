@@ -36,6 +36,8 @@ public class CurrentEvent extends AnchorPane {
     // Method called when the FXML is initialized
     public void initialize() {
         // Set the text of the currentEventName label to the eventName
+        currentEventName.setWrapText(true);
+        currentEventName.setPrefWidth(300);
         currentEventName.setText(eventName);
     }
 
