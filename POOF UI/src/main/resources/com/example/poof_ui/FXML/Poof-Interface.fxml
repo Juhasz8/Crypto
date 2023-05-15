@@ -332,7 +332,7 @@
                                                 <Insets />
                                              </VBox.margin>
                                              <content>
-                                                <VBox fx:id="currentEvents" alignment="TOP_CENTER" maxWidth="-Infinity" prefHeight="283.0" prefWidth="645.0" spacing="10.0">
+                                                <VBox fx:id="currentEvents" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="283.0" spacing="10.0">
                                                    <padding>
                                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                    </padding>
