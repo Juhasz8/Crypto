@@ -136,7 +136,9 @@ public class PoofController implements Initializable {
 
             // Add a CurrentEvent
             CurrentEventManager currentEvent = new CurrentEventManager();
-            currentEvents.getChildren().add(currentEvent.getEvent());
+            if (currentEvent != null) {
+                currentEvents.getChildren().add(currentEvent.getEvent());
+            }
 
             // Add traders
             TraderGUI traderGUI = new TraderGUI();
