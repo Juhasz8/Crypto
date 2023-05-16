@@ -7,7 +7,7 @@ import java.util.*;
 
 
 //should also have a type REWARD, which is used by the miners
-enum TransactionType { BUY, SELL, REWARD }
+enum TransactionType { NORMAL, REWARD }
 
 //class used to listen for broadcasted transaction requests, and connect them with eachother
 //after these transaction requests become connected, it broadcasts it towards every miner.
@@ -18,10 +18,18 @@ public class Network
     private static Network instance;
     private ArrayList<SellingRequest> sellingRequests = new ArrayList<>();
     private ArrayList<BuyingRequest> buyingRequests = new ArrayList<>();
+    public Block block1 = new Block(null, null);
 
     private ArrayList<TransactionMatch> matches = new ArrayList<>();
 
-    private float minerReward = 5;
+    private float minerReward = 10;
+    public float GetMinerReward() { return minerReward; }
+
+    private int miningDifficulty = 2;
+    public int GetDifficulty() { return miningDifficulty; }
+
+    private int maxTransactionOnLedger = 15;
+    public int GetMaxLedgerCount() { return maxTransactionOnLedger; }
 
     private ArrayList<Miner> miners = new ArrayList<>();
     private ArrayList<Trader> traders = new ArrayList<>();
@@ -71,22 +79,28 @@ public class Network
 
             TransactionMatch match = GetMatch(seller, trader);
 
-            byte[] originalMessage = Convert(match);
+            //byte[] originalMessage = Cryptography.Convert(match);
             //convert the match into an array of bits, and pass these bytes and the publicKey of the buyer to the seller to sign
-            byte[] signedMessage = seller.Sign(originalMessage);
+            //byte[] signedMessage = seller.Sign(originalMessage);
 
+            match.SignTransaction(seller);
+
+            for(int i = 0; i < miners.size(); i++)
+            {
+                miners.get(i).ProcessLedger(match);
+            }
             //ask for the verification of the trader for the signed transaction
-            if(trader.VerifySignedMessage(originalMessage, signedMessage, seller.publicKey))
-            {
-                //pass the message to the miners
-
-                System.out.println("VERIFIED MATCH: " + seller.name + " sends " + match.amount + " puffs to "+ trader.name);
-                matches.add(match);
-            }
-            else
-            {
-                System.out.println("The Buyer didnt verify the Transaction! ");
-            }
+//            if(trader.VerifySignedMessage(originalMessage, signedMessage, seller.publicKey))
+//            {
+//                //pass the message to the miners
+//
+//                System.out.println("VERIFIED MATCH: " + seller.name + " sends " + match.amount + " puffs to "+ trader.name);
+//                matches.add(match);
+//            }
+//            else
+//            {
+//                System.out.println("The Buyer didnt verify the Transaction! ");
+//            }
 
             AdjustRequests();
         }
@@ -96,9 +110,9 @@ public class Network
     {
         //the seller sells more
         if(sellingRequests.get(0).tradeAmount > buyingRequests.get(0).tradeAmount)
-            return new TransactionMatch(seller.publicKeyString, trader.publicKeyString, buyingRequests.get(0).tradeAmount);
+            return new TransactionMatch(TransactionType.NORMAL, seller.publicKeyString, trader.publicKeyString, buyingRequests.get(0).tradeAmount);
         else
-            return new TransactionMatch(seller.publicKeyString, trader.publicKeyString, sellingRequests.get(0).tradeAmount);
+            return new TransactionMatch(TransactionType.NORMAL, seller.publicKeyString, trader.publicKeyString, sellingRequests.get(0).tradeAmount);
     }
 
     private void AdjustRequests()
@@ -116,27 +130,6 @@ public class Network
 
             sellingRequests.remove(0);
         }
-    }
-
-    private byte[] Convert(TransactionMatch match)
-    {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(bos);
-
-        try
-        {
-            dos.write(match.fromPublicKey.getBytes());
-            dos.write(match.toPublicKey.getBytes());
-            dos.writeFloat(match.amount);
-
-            dos.flush();
-        }
-        catch (Exception e)
-        {
-            System.out.println(e);
-        }
-
-        return bos.toByteArray();
     }
 
     public static Network getInstance()
@@ -159,18 +152,28 @@ public class Network
         TryToMatch();
     }
 
-    public float GetMinerRewardAmount()
-    {
-        return minerReward;
-    }
-
     public void JoinMinerToTheNetwork(Miner miner)
     {
         miners.add(miner);
+        //miner.AddBlockToChain(block1);
     }
 
     public void JoinTraderToTheNetwork(Trader trader)
     {
         traders.add(trader);
+        //trader.AddBlockToChain(block1);
+    }
+
+    public void NewBlockWasMined(Block newBlock)
+    {
+        //we notify every user in the network about the new Block
+        for(int i = 0; i < miners.size(); i++)
+        {
+            miners.get(i).AddBlockToChain(newBlock);
+        }
+        for(int i = 0; i < traders.size(); i++)
+        {
+            traders.get(i).AddBlockToChain(newBlock);
+        }
     }
 }

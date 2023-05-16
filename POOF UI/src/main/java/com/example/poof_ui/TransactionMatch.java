@@ -1,7 +1,5 @@
 package com.example.poof_ui;
 
-import java.security.PublicKey;
-
 public class TransactionMatch
 {
     //public User fromUser;
@@ -10,12 +8,28 @@ public class TransactionMatch
     public String toPublicKey;
     public float amount;
 
-    public TransactionMatch(String fromPublicKey, String toPublicKey, float amount)
+    //the byte message of this match
+    public byte[] originalMessage;
+    public byte[] signedMessage;
+    public User seller;
+
+    public TransactionType type;
+
+    public TransactionMatch(TransactionType type, String fromPublicKey, String toPublicKey, float amount)
     {
         //this.fromUser = fromUser;
         //this.toUser = toUser;
+        this.type = type;
         this.fromPublicKey = fromPublicKey;
         this.toPublicKey = toPublicKey;
         this.amount = amount;
     }
+
+    public void SignTransaction(User seller)
+    {
+        this.seller = seller;
+        originalMessage = Cryptography.ConvertFromTransactionToByte(this);
+        signedMessage = seller.Sign(originalMessage);
+    }
+
 }

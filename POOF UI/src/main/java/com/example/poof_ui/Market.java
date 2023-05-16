@@ -8,7 +8,6 @@ public class Market
     private ArrayList<Block> blockChain = new ArrayList<>();
 
 
-
     //(this method is for later use maybe)
     private Boolean isChainValid()
     {
