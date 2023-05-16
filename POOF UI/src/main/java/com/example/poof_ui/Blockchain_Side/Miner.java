@@ -1,4 +1,4 @@
-package com.example.poof_ui;
+package com.example.poof_ui.Blockchain_Side;
 
 import java.util.Random;
 import java.security.Signature;

@@ -2,23 +2,15 @@ package com.example.poof_ui;
 
 // Imports
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*;
 
 import javafx.animation.KeyFrame;
-import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
-import javafx.css.Size;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
@@ -27,10 +19,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -44,7 +34,11 @@ public class PoofController implements Initializable {
     @FXML
     private Label label_Months;
     @FXML
+    private VBox currentEvents;
+    @FXML
     private Tab graphView;
+    @FXML
+    private ScrollPane currentEventsScroll;
     @FXML
     private Button buttonBuy;
     @FXML
@@ -64,6 +58,10 @@ public class PoofController implements Initializable {
 
     @FXML
     private TilePane blockchain_Tile;
+    @FXML
+    private TilePane tradersTile;
+    @FXML
+    private TilePane minersTile;
 
     // Chart data
     private XYChart.Series series1;
@@ -78,13 +76,11 @@ public class PoofController implements Initializable {
     int monthsPassed = 0;
     int weeksPassed = 0;
 
+    // create an object of Random class
+    Random random = new Random();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Rotate the chain_Wrapper
-        //RotateTransition rotateTransition = new RotateTransition(Duration.seconds(20), chain_Wrapper);
-        //rotateTransition.setByAngle(360);
-        //rotateTransition.setCycleCount(Timeline.INDEFINITE);
-        //rotateTransition.play();
 
         // Initialize chart data
         series1 = new XYChart.Series();
@@ -134,11 +130,22 @@ public class PoofController implements Initializable {
             // Scroll the chart to the right to show the latest data point
             chartScroll.setHvalue(1);
 
-            // Create something hahaha
-            Image image = new Image(getClass().getResourceAsStream("chainblock.png"));
-            ImageView myImage = new ImageView(image);
-            // Add it to the blockchainTile TilePane
-            blockchain_Tile.getChildren().add(myImage);
+            // Add transaction blocks
+            TransactionBlock transactionBlock = new TransactionBlock();
+            blockchain_Tile.getChildren().add(transactionBlock);
+
+            // Add a CurrentEvent
+            CurrentEventManager currentEvent = new CurrentEventManager();
+            currentEvents.getChildren().add(currentEvent.getEvent());
+
+            // Add traders
+            TraderGUI traderGUI = new TraderGUI();
+            tradersTile.getChildren().add(traderGUI);
+
+            // Add miners
+            MinerGUI minerGUI = new MinerGUI();
+            minersTile.getChildren().add(minerGUI);
+
         }));
 
         // Set the timeline to repeat 500 times (10 minutes)
@@ -147,19 +154,22 @@ public class PoofController implements Initializable {
         // Initialize UI elements
         graphViewScroll.setHvalue(0.5);
         graphViewScroll.setVvalue(0.5);
+
+
+
     }
     // Change image on the play button
     @FXML
     void startTimeline(ActionEvent event) {
         if (isPlaying) {
             // Change the image back to the play button
-            Image playButton = new Image(getClass().getResourceAsStream("play_button.png"));
+            Image playButton = new Image(getClass().getResourceAsStream("Icons/play_button.png"));
             play_image.setImage(playButton);
             // Stop the timeline
             timeline.stop();
         } else {
             // Change the image to the pause button
-            Image pauseButton = new Image(getClass().getResourceAsStream("pause_button.png"));
+            Image pauseButton = new Image(getClass().getResourceAsStream("Icons/pause_button.png"));
             play_image.setImage(pauseButton);
             // Start the timeline
             timeline.play();

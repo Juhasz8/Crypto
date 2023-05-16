@@ -46,7 +46,7 @@
                            <graphic>
                               <ImageView fx:id="play_image" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@play_button.png" />
+                                    <Image url="@../Icons/play_button.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -55,7 +55,7 @@
                            <graphic>
                               <ImageView fx:id="restart_image" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@restart_button.png" />
+                                    <Image url="@../Icons/restart_button.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -213,6 +213,15 @@
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                     </GridPane>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                       <content>
+                                          <TilePane fx:id="minersTile" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefColumns="4" prefRows="4" prefTileHeight="80.0" prefTileWidth="80.0" vgap="20.0">
+                                             <padding>
+                                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                             </padding>
+                                          </TilePane>
+                                       </content>
+                                    </ScrollPane>
                                  </children>
                               </VBox>
                               <GridPane vgap="1.0" GridPane.columnIndex="1">
@@ -236,7 +245,7 @@
                                              <children>
                                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@Poof_IconWhite_1.png" />
+                                                      <Image url="@../Icons/Poof_IconWhite_1.png" />
                                                    </image>
                                                 </ImageView>
                                                 <Label text="Poof Coin (POOF)" textFill="WHITE">
@@ -298,7 +307,7 @@
                                     </VBox>
                                     <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #2a2d30;" GridPane.rowIndex="6" GridPane.rowSpan="2147483647">
                                        <children>
-                                          <GridPane style="-fx-background-color: #42454a;">
+                                          <GridPane prefHeight="50.0" style="-fx-background-color: #42454a;" VBox.vgrow="SOMETIMES">
                                              <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -318,6 +327,18 @@
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </padding>
                                           </GridPane>
+                                          <ScrollPane fx:id="currentEventsScroll" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="300.0" vbarPolicy="ALWAYS">
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                             <content>
+                                                <VBox fx:id="currentEvents" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="283.0" spacing="10.0">
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </content>
+                                          </ScrollPane>
                                        </children>
                                     </VBox>
                                  </children>
@@ -344,6 +365,15 @@
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                     </GridPane>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                       <content>
+                                          <TilePane fx:id="tradersTile" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefColumns="4" prefRows="4" prefTileHeight="80.0" prefTileWidth="80.0" vgap="20.0">
+                                             <padding>
+                                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                             </padding>
+                                          </TilePane>
+                                       </content>
+                                    </ScrollPane>
                                  </children>
                               </VBox>
                            </children>
@@ -357,7 +387,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@home_icon.png" />
+                        <Image url="@../Icons/home_icon.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -377,7 +407,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@graphview_icon.png" />
+                        <Image url="@../Icons/graphview_icon.png" />
                      </image>
                   </ImageView>
                </graphic>

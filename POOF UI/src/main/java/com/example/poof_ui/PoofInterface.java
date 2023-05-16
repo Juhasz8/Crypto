@@ -14,7 +14,7 @@ public class PoofInterface extends Application{
     public void start(Stage stage) throws IOException {
 
         // Load the FXML file
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Poof-Interface.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/Poof-Interface.fxml"));
 
         // Load the root node from the FXML file
         Parent root = loader.load();
