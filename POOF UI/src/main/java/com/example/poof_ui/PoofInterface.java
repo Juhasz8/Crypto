@@ -38,7 +38,7 @@ public class PoofInterface extends Application{
         // Launch the JavaFX application
         launch();
 
-        System.out.println("----------------------------------------------");
+        System.out.println("---ajjajjjajajajajaj mergetool teeeeest------------------------------------------");
 
 
         Miner miner1 = new Miner(20, 21);
