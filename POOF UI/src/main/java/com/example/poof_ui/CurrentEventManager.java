@@ -76,6 +76,6 @@ public class CurrentEventManager {
             return category4.get(cat4Random);
         }
 
-        return null; // Return null if no matching event is found (It will always find haha)
+        return null; // Return null if no matching event is found
     }
 }

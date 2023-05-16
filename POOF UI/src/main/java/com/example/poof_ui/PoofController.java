@@ -193,4 +193,12 @@ public class PoofController implements Initializable {
         // Call the start method of the new instance with the current stage
         poofApp.start(stage);
     }
+    @FXML
+    void buyPoofs(ActionEvent event) throws IOException {
+        // Opens the poof market modal in buy mode (tab)
+    }
+    @FXML
+    void sellPoofs(ActionEvent event) throws IOException {
+        // Opens the poof market modal in sell mode (tab)
+    }
 }
