@@ -1,7 +1,7 @@
 package com.example.poof_ui.Blockchain_Side;//import javax.swing.*;
 
 
-public class Main {
+public class    Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
 
