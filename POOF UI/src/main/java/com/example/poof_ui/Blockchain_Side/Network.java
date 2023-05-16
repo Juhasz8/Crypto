@@ -39,6 +39,14 @@ public class Network
     public FullNode fullNode = new FullNode();
     public Map<String, User> networkUsers = new HashMap<>();
 
+    public static Network getInstance()
+    {
+        if(instance == null)
+            instance = new Network();
+
+        return instance;
+    }
+
     private Network()
     {
         for(int i = 0; i < amountOfUsedNames.length; i++)
@@ -129,14 +137,6 @@ public class Network
 
             sellingRequests.remove(0);
         }
-    }
-
-    public static Network getInstance()
-    {
-        if(instance == null)
-            instance = new Network();
-
-        return instance;
     }
 
     public void ProcessBuyingRequest(BuyingRequest request)
