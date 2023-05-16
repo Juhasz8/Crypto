@@ -36,5 +36,7 @@ public class PoofInterface extends Application{
 
         // Launch the JavaFX application
         launch();
+
+
     }
 }

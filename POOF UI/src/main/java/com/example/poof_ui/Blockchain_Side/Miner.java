@@ -173,7 +173,7 @@ public class Miner extends User
             }
             else
             {
-                System.out.println("Fucking unverified transaction");
+                System.out.println("Unverified transaction");
             }
         }
         else
