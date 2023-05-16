@@ -4,16 +4,24 @@ import java.util.Random;
 
 public class SimulationManager
 {
-
+    private static SimulationManager instance;
     //creates the User objects and the threads
 
     public float marketPrice = 0;
 
     private Random random = new Random();
 
+    public static SimulationManager getInstance()
+    {
+        if(instance == null)
+            instance = new SimulationManager();
+
+        return instance;
+    }
+
     private SimulationManager()
     {
-
+        UpdateCycle();
     }
 
     private void UpdateCycle()
@@ -47,6 +55,7 @@ public class SimulationManager
 
         marketPriceChange += random.nextFloat(20)-10;
         marketPrice += marketPriceChange;
+
     }
 
 }

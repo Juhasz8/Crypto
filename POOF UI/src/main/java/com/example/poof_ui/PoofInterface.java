@@ -1,5 +1,6 @@
 package com.example.poof_ui;
 import com.example.poof_ui.Blockchain_Side.Miner;
+import com.example.poof_ui.Blockchain_Side.SimulationManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -39,6 +40,8 @@ public class PoofInterface extends Application{
         launch();
 
         System.out.println("-----------------------APPA UTEEE APPPAA UTEE-----------------------");
+
+        SimulationManager.getInstance();
 
         Miner miner1 = new Miner(20, 21);
         System.out.println("name: " + miner1.name);
