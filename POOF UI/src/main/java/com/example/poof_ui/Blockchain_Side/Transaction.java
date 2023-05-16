@@ -1,12 +1,12 @@
 package com.example.poof_ui.Blockchain_Side;
 
-public class TransactionMatch
+public class Transaction
 {
     //public User fromUser;
     //public User toUser;
     public String fromPublicKey;
     public String toPublicKey;
-    public float amount;
+    public double amount;
 
     //the byte message of this match
     public byte[] originalMessage;
@@ -15,7 +15,7 @@ public class TransactionMatch
 
     public TransactionType type;
 
-    public TransactionMatch(TransactionType type, String fromPublicKey, String toPublicKey, float amount)
+    public Transaction(TransactionType type, String fromPublicKey, String toPublicKey, double amount)
     {
         //this.fromUser = fromUser;
         //this.toUser = toUser;

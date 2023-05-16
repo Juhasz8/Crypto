@@ -9,7 +9,7 @@ public class Miner extends User
     private int miningPower;
     private Random rand;
     int numberOfTransactions = 0;
-    private ArrayList<TransactionMatch> waitingTrans = new ArrayList<>();
+    private ArrayList<Transaction> waitingTrans = new ArrayList<>();
 
     //mining
     private Block myblock;
@@ -28,10 +28,10 @@ public class Miner extends User
         //Update();
         Network.getInstance().JoinMinerToTheNetwork(this);
 
-        myblock = new Block(null, lastTrustedBlock.hash);
-        previousTrustedHash = lastTrustedBlock.hash;
+        myblock = new Block(null, Network.getInstance().fullNode.GetLastTrustedBlockHash());
+        previousTrustedHash = Network.getInstance().fullNode.GetLastTrustedBlockHash();
         //myblock.AddData(Cryptography.ConvertFromTransactionToByte(new TransactionMatch(TransactionType.REWARD, null, publicKeyString, Network.getInstance().GetMinerReward())));
-        myblock.AddData(new TransactionMatch(TransactionType.REWARD, null, publicKeyString, Network.getInstance().GetMinerReward()));
+        myblock.AddData(new Transaction(TransactionType.REWARD, null, publicKeyString, Network.getInstance().GetMinerReward()));
 
         Update();
     }
@@ -69,6 +69,11 @@ public class Miner extends User
         }
     }
 
+    public void ReceiveNewBlockWasMinedInformation(Block newblock)
+    {
+
+    }
+
     private String CalculateHash()
     {
         return Cryptography.sha256(Long.toString(myblock.timeStamp) + Integer.toString(nonce) + myblock.GetData());
@@ -77,7 +82,7 @@ public class Miner extends User
     //private void ValidateBlock
 
     //here we broadcast the new block to everyone execute all transactions stated on the ledger
-    public boolean VerifySignedMessage(TransactionMatch signedTransaction)
+    public boolean VerifySignedMessage(Transaction signedTransaction)
     {
         //byte[] originalMessage, byte[] signedMessage, PublicKey sellerPublicKey
         try
@@ -117,6 +122,7 @@ public class Miner extends User
 
         //flushing the data
         myblock = new Block(null, previousTrustedHash);
+        myblock.AddData(new Transaction(TransactionType.REWARD, null, publicKeyString, Network.getInstance().GetMinerReward()));
 
         //adding the waiting transactions to the ledger
         for(int i = waitingTrans.size()-1; i >= 0; i--)
@@ -152,9 +158,10 @@ public class Miner extends User
     public void SomebodyElseMinedABlock(Block newBlock)
     {
         //the previoushash will be updated according to the relation between my current block i am working on and this new block that was mined by someone else
+        //we do this check simply by comparing the merkle root of the new block that was mined and the block I am trying to mine
     }
 
-    public void ProcessLedger(TransactionMatch signedTransaction)
+    public void ProcessLedger(Transaction signedTransaction)
     {
         //byte[] originalMessage, byte[] signedMessage, PublicKey sellerPublicKey
         if (numberOfTransactions < Network.getInstance().GetMaxLedgerCount())

@@ -41,7 +41,7 @@ public class Cryptography {
 
     //this is how a ledger looks like:
     //TOMINERKEY-REWARDAMOUNT , FROMKEY-TOKEY-AMOUNT , FROMKEY-TOKEY-AMOUNT
-    public static byte[] ConvertFromTransactionToByte(TransactionMatch match)
+    public static byte[] ConvertFromTransactionToByte(Transaction match)
     {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(bos);
@@ -51,7 +51,7 @@ public class Cryptography {
             if(match.type == TransactionType.NORMAL)
                 dos.write(match.fromPublicKey.getBytes());
             dos.write(match.toPublicKey.getBytes());
-            dos.writeFloat(match.amount);
+            dos.writeDouble(match.amount);
 
             dos.flush();
         }
@@ -77,9 +77,13 @@ public class Cryptography {
         }
     }
 
-    public static String ConvertFromTransactionToString(TransactionMatch transactionMatch)
+    public static String ConvertFromTransactionToString(Transaction transaction)
     {
-        return ConvertFromByteToString(ConvertFromTransactionToByte(transactionMatch));
+        return ConvertFromByteToString(ConvertFromTransactionToByte(transaction));
     }
 
+    public static String ConvertFromTransactionToHash(Transaction transaction)
+    {
+        return sha256(ConvertFromTransactionToString(transaction));
+    }
 }

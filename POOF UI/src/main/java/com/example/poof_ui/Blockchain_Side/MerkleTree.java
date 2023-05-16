@@ -1,18 +1,19 @@
-﻿package com.example.poof_ui;
+package com.example.poof_ui.Blockchain_Side;
 
 import java.util.ArrayList;
 
 public class MerkleTree
 {
     public String merkleRoot;
-    public ArrayList<TransactionMatch> transactions;
+
+    public ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 
     private void BuildTree()
     {
         ArrayList<String> hashes = new ArrayList<>();
-        for (int i = 0; i < transactions.size(); i++)
+        for(int i = 0; i < transactions.size(); i++)
         {
-            hashes.add(Cryptography.ConvertFromTransactionToString(transactions.get(i)));
+            hashes.add(Cryptography.ConvertFromTransactionToHash(transactions.get(i)));
         }
 
         while (hashes.size() > 1)
@@ -30,9 +31,10 @@ public class MerkleTree
         merkleRoot = hashes.get(0);
     }
 
-    public void AddTransaction(TransactionMatch transactionMatch)
+    public void AddTransaction(Transaction transaction)
     {
-        transactions.add(transactionMatch);
+        transactions.add(transaction);
         BuildTree();
     }
+
 }

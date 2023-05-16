@@ -1,7 +1,6 @@
 package com.example.poof_ui.Blockchain_Side;
 
 import java.util.Date;
-import java.io.ByteArrayOutputStream;
 
 public class Block {
 
@@ -10,7 +9,10 @@ public class Block {
     public long timeStamp;
 
     private byte[] blockData;
-    private MerkleTree dataTree;
+    public MerkleTree dataTree;
+
+    //just for debugging and printing purposes
+    public boolean isTrusted = false;
 
     public Block(byte[] blockData, String previousHash)
     {
@@ -45,7 +47,7 @@ public class Block {
         }
     }
 */
-    public void AddData(TransactionMatch transaction)
+    public void AddData(Transaction transaction)
     {
         dataTree.AddTransaction(transaction);
     }
