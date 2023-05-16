@@ -47,7 +47,7 @@ public class User
         }
         catch (Exception e)
         {
-            System.out.println("Keys couldnt be created: " + e);
+            System.out.println("Keys couldn't be created: " + e);
         }
 
 
