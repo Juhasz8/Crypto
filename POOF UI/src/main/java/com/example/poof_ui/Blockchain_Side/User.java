@@ -1,6 +1,8 @@
 package com.example.poof_ui.Blockchain_Side;
 
+import java.io.*;
 import java.security.*;
+import java.util.ArrayList;
 import java.util.Base64;
 
 public class User
@@ -16,6 +18,7 @@ public class User
 
     //the amount of Puff you own
     private double wallet = 0;
+
 
     public User()
     {
@@ -37,21 +40,28 @@ public class User
 
             Base64.Encoder encoder = Base64.getEncoder();
 
-            //System.out.println("Keys generated -> public: " + encoder.encodeToString(publicKey.getEncoded()) + " size: "+ encoder.encodeToString(publicKey.getEncoded()).length() + " private: " + encoder.encodeToString(privKey.getEncoded()) );
+            //System.out.println("Keys generated -> public: " + encoder.encodeToString(publicKey.getEncoded()) + " size: "+ encoder.encodeToString(publicKey.getEncoded()).length() + " private: " + encoder.encodeToString(privateKey.getEncoded()));
             publicKeyString = encoder.encodeToString(publicKey.getEncoded());
             privateKeyString = encoder.encodeToString(privateKey.getEncoded());
+
         }
         catch (Exception e)
         {
-            System.out.println("Keys couldnt be created: " + e);
+            System.out.println("Keys couldn't be created: " + e);
         }
+
 
         name = Network.getInstance().GetNewRandomUserName();
     }
 
     //this is called whenever the transaction is verified
-    public void IncreaseWallet(int amount)
+
+    public void IncreaseWallet(double amount)
     {
+        if(amount > 0)
+            System.out.println(name + ": My wallet got increased (+" + amount +")");
+        else
+            System.out.println(name + ": My wallet got decreased (" + amount +")");
         wallet += amount;
     }
 
@@ -93,7 +103,10 @@ public class User
             System.out.println("Signing failed: " + e);
         }
 
-        System.out.println("Seller didnt sign the Transaction! ");
+        System.out.println("Seller didn't sign the Transaction! ");
         return null;
     }
+
+
+
 }

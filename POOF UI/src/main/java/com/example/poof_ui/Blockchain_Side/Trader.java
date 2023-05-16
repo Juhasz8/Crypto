@@ -26,24 +26,4 @@ public class Trader extends User
         }
     }
 
-    public boolean VerifySignedMessage(byte[] originalMessage, byte[] signedMessage, PublicKey sellerPublicKey)
-    {
-        try
-        {
-            Signature signature = Signature.getInstance("SHA256withRSA");
-            signature.initVerify(sellerPublicKey);
-            signature.update(originalMessage);
-
-            boolean isCorrect = signature.verify(signedMessage);
-
-            return isCorrect;
-        }
-        catch (Exception e)
-        {
-            System.out.println(e);
-        }
-
-        return false;
-    }
-
 }

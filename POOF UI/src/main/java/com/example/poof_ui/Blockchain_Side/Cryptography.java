@@ -1,5 +1,8 @@
 package com.example.poof_ui.Blockchain_Side;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 
 public class Cryptography {
@@ -36,5 +39,51 @@ public class Cryptography {
         }
     }
 
+    //this is how a ledger looks like:
+    //TOMINERKEY-REWARDAMOUNT , FROMKEY-TOKEY-AMOUNT , FROMKEY-TOKEY-AMOUNT
+    public static byte[] ConvertFromTransactionToByte(Transaction match)
+    {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
 
+        try
+        {
+            if(match.type == TransactionType.NORMAL)
+                dos.write(match.fromPublicKey.getBytes());
+            dos.write(match.toPublicKey.getBytes());
+            dos.writeDouble(match.amount);
+
+            dos.flush();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Converting from transaction to byte[] resulted in an error!");
+            throw new RuntimeException(e);
+        }
+
+        return bos.toByteArray();
+    }
+
+    public static String ConvertFromByteToString(byte[] data)
+    {
+        try
+        {
+            return new String(data, "UTF-8");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            System.out.println("Converting from byte[] to string resulted in an error!");
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String ConvertFromTransactionToString(Transaction transaction)
+    {
+        return ConvertFromByteToString(ConvertFromTransactionToByte(transaction));
+    }
+
+    public static String ConvertFromTransactionToHash(Transaction transaction)
+    {
+        return sha256(ConvertFromTransactionToString(transaction));
+    }
 }

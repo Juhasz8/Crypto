@@ -76,25 +76,11 @@ public class PoofController implements Initializable {
     int monthsPassed = 0;
     int weeksPassed = 0;
 
-    //List of profile pictures
-    List<String> profilePictures = Arrays.asList(
-            "ProfileImages/DaliMask.png"
-            ,"ProfileImages/Mario.png"
-            ,"ProfileImages/NinjaTurtle.png"
-            ,"ProfileImages/PeterParker.png"
-            ,"ProfileImages/RickSanchez.png"
-            ,"ProfileImages/Sonic.png"
-            ,"ProfileImages/Stitch.png"
-            ,"ProfileImages/StormTrooper.png"
-            ,"ProfileImages/Tom.png"
-            ,"ProfileImages/WalterWhite.png"
-    );
     // create an object of Random class
     Random random = new Random();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
 
         // Initialize chart data
         series1 = new XYChart.Series();
@@ -149,27 +135,16 @@ public class PoofController implements Initializable {
             blockchain_Tile.getChildren().add(transactionBlock);
 
             // Add a CurrentEvent
-            CurrentEvent currentEvent = new CurrentEvent();
-            currentEvents.getChildren().add(currentEvent);
+            CurrentEventManager currentEvent = new CurrentEventManager();
+            currentEvents.getChildren().add(currentEvent.getEvent());
 
             // Add traders
             TraderGUI traderGUI = new TraderGUI();
             tradersTile.getChildren().add(traderGUI);
-            // Add trader's Profile Picture
-            int randomTraderProfilePicture = random.nextInt(10);
-            String currentTraderProfilePic = profilePictures.get(randomTraderProfilePicture);
-            Image traderProfilePicture = new Image(getClass().getResourceAsStream((String) currentTraderProfilePic));
-            traderGUI.setProfilePicture(traderProfilePicture);
 
             // Add miners
             MinerGUI minerGUI = new MinerGUI();
             minersTile.getChildren().add(minerGUI);
-
-            // Add miner's Profile Picture
-            int randomMinerProfilePicture = random.nextInt(10);
-            String currentMinerProfilePic = profilePictures.get(randomMinerProfilePicture);
-            Image minerProfilePicture = new Image(getClass().getResourceAsStream((String) currentMinerProfilePic));
-            minerGUI.setProfilePicture(minerProfilePicture);
 
         }));
 
@@ -217,5 +192,13 @@ public class PoofController implements Initializable {
 
         // Call the start method of the new instance with the current stage
         poofApp.start(stage);
+    }
+    @FXML
+    void buyPoofs(ActionEvent event) throws IOException {
+        // Opens the poof market modal in buy mode (tab)
+    }
+    @FXML
+    void sellPoofs(ActionEvent event) throws IOException {
+        // Opens the poof market modal in sell mode (tab)
     }
 }
