@@ -39,7 +39,8 @@ public class PoofInterface extends Application{
         // Launch the JavaFX application
         launch();
 
-        System.out.println("-----------------------APPA UTEEE APPPAA UTEE-----------------------");
+        System.out.println("---------------------------------------------");
+
 
         SimulationManager.getInstance();
 

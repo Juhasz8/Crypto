@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #1e1f22;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.poof_ui.PoofController">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #1e1f22;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.poof_ui.PoofController">
    <children>
       <GridPane alignment="CENTER" style="-fx-background-color: #1e1f22;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -261,7 +261,7 @@
                                              <children>
                                                 <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
                                                    <children>
-                                                      <Label text="0" textFill="WHITE">
+                                                      <Label fx:id="marketPrice" text="0" textFill="WHITE">
                                                          <font>
                                                             <Font name="Arial Bold" size="48.0" />
                                                          </font>

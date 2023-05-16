@@ -62,6 +62,8 @@ public class PoofController implements Initializable {
     private TilePane tradersTile;
     @FXML
     private TilePane minersTile;
+    @FXML
+    private Label marketPrice;
 
     // Chart data
     private XYChart.Series series1;
