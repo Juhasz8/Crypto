@@ -11,6 +11,11 @@ public class SimulationManager
 
     private Random random = new Random();
 
+    private SimulationManager()
+    {
+
+    }
+
     private void UpdateCycle()
     {
         JoiningPeople();

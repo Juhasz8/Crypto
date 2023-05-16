@@ -136,7 +136,9 @@ public class PoofController implements Initializable {
 
             // Add a CurrentEvent
             CurrentEventManager currentEvent = new CurrentEventManager();
-            currentEvents.getChildren().add(currentEvent.getEvent());
+            if (currentEvent != null) {
+                currentEvents.getChildren().add(currentEvent.getEvent());
+            }
 
             // Add traders
             TraderGUI traderGUI = new TraderGUI();
@@ -192,5 +194,13 @@ public class PoofController implements Initializable {
 
         // Call the start method of the new instance with the current stage
         poofApp.start(stage);
+    }
+    @FXML
+    void buyPoofs(ActionEvent event) throws IOException {
+        // Opens the poof market modal in buy mode (tab)
+    }
+    @FXML
+    void sellPoofs(ActionEvent event) throws IOException {
+        // Opens the poof market modal in sell mode (tab)
     }
 }

@@ -63,19 +63,19 @@ public class CurrentEventManager {
         // Return the event based on the matched myKey value
         Random randomEvent = new Random();
         if (myKey == 5) {
-            int cat1Random = randomEvent.nextInt(0,4);
+            int cat1Random = randomEvent.nextInt(0,3);
             return category1.get(cat1Random);
         } else if (myKey == 15) {
-            int cat2Random = randomEvent.nextInt(0,5);
+            int cat2Random = randomEvent.nextInt(0,4);
             return category2.get(cat2Random);
         } else if (myKey == 30) {
-            int cat3Random = randomEvent.nextInt(0,6);
+            int cat3Random = randomEvent.nextInt(0,5);
             return category3.get(cat3Random);
         } else if (myKey == 50) {
-            int cat4Random = randomEvent.nextInt(0,6);
+            int cat4Random = randomEvent.nextInt(0,5);
             return category4.get(cat4Random);
         }
 
-        return null; // Return null if no matching event is found (It will always find haha)
+        return null; // Return null if no matching event is found
     }
 }

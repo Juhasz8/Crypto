@@ -38,9 +38,14 @@ public class PoofInterface extends Application{
         // Launch the JavaFX application
         launch();
 
-        System.out.println("-----------------------APPA UTEEE APPPAA UTEE-----------------------");
+<<<<<<< HEAD
+
+=======
+        System.out.println("----------------------------------------------");
+
 
         Miner miner1 = new Miner(20, 21);
         System.out.println("name: " + miner1.name);
+>>>>>>> 441649b5378cf6ca7b32fb1be5130d7d850b4149
     }
 }
