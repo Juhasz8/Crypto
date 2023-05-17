@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import com.example.poof_ui.Blockchain_Side.SimulationManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -63,7 +64,7 @@ public class PoofController implements Initializable {
     @FXML
     private TilePane minersTile;
     @FXML
-    private Label marketPrice;
+    private static Label marketPrice;
 
     // Chart data
     private XYChart.Series series1;
@@ -81,14 +82,29 @@ public class PoofController implements Initializable {
     // create an object of Random class
     Random random = new Random();
 
+    public static Label GetMarketPriceLabel()
+    {
+        return marketPrice;
+    }
+
+    public static PoofController instance;
+    public CurrentEventManager eventManager = new CurrentEventManager();
+
+    public int eventIndex = 0;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        instance = this;
+
 
         // Initialize chart data
         series1 = new XYChart.Series();
         lineChart.getData().addAll(series1);
         // Initialize chart animation
-        timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> {
+        timeline = new Timeline(new KeyFrame(Duration.seconds(2.5), event -> {
+
+
+
             // Timeline Counter
             // Increment the years, months, and weeks passed
             weeksPassed ++;
@@ -136,19 +152,25 @@ public class PoofController implements Initializable {
             TransactionBlock transactionBlock = new TransactionBlock();
             blockchain_Tile.getChildren().add(transactionBlock);
 
+
+            //MOVED THIS TO THE SIMULATIONMANAGER, cause the eventmanager shouldn't be recreated every loop
+
             // Add a CurrentEvent
+            /*
             CurrentEventManager currentEvent = new CurrentEventManager();
             if (currentEvent != null) {
                 currentEvents.getChildren().add(currentEvent.getEvent());
             }
+            */
 
-            // Add traders
-            TraderGUI traderGUI = new TraderGUI();
-            tradersTile.getChildren().add(traderGUI);
 
-            // Add miners
-            MinerGUI minerGUI = new MinerGUI();
-            minersTile.getChildren().add(minerGUI);
+            if(eventIndex == 1)
+            {
+                PotentiallyMakeEvent();
+                eventIndex = 0;
+            }
+            else
+                eventIndex++;
 
         }));
 
@@ -159,9 +181,17 @@ public class PoofController implements Initializable {
         graphViewScroll.setHvalue(0.5);
         graphViewScroll.setVvalue(0.5);
 
-
-
     }
+
+    public void PotentiallyMakeEvent()
+    {
+        CurrentEvent event = eventManager.getEvent();
+        if(event != null)
+            currentEvents.getChildren().add(0, new CurrentEvent(event.GetName()));
+    }
+
+    private Thread simulationThread;
+
     // Change image on the play button
     @FXML
     void startTimeline(ActionEvent event) {
@@ -171,15 +201,51 @@ public class PoofController implements Initializable {
             play_image.setImage(playButton);
             // Stop the timeline
             timeline.stop();
+
+            SimulationManager.getInstance().SuspendSimulation();
+
         } else {
             // Change the image to the pause button
             Image pauseButton = new Image(getClass().getResourceAsStream("Icons/pause_button.png"));
             play_image.setImage(pauseButton);
             // Start the timeline
             timeline.play();
+
+            if(simulationThread == null)
+                StartSimulation();
+            else
+                SimulationManager.getInstance().ResumeSimulation();
         }
         // Toggle the state of the button
         isPlaying = !isPlaying;
+    }
+
+    public void AddMinerGUI()
+    {
+        // Add miners
+        MinerGUI minerGUI = new MinerGUI();
+        minersTile.getChildren().add(minerGUI);
+    }
+
+    public void AddTraderGUI()
+    {
+        // Add traders
+        TraderGUI traderGUI = new TraderGUI();
+        tradersTile.getChildren().add(traderGUI);
+    }
+
+    public static PoofController getInstance()
+    {
+        return instance;
+    }
+
+    public void StartSimulation()
+    {
+        System.out.println("---------------------------------------------");
+        simulationThread = new Thread(SimulationManager.getInstance());
+        simulationThread.start();
+        System.out.println("Simulation started!");
+        System.out.println("---------------------------------------------");
     }
 
     @FXML

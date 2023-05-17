@@ -5,7 +5,7 @@ import java.security.*;
 import java.util.ArrayList;
 import java.util.Base64;
 
-public class User
+public class User extends Thread
 {
 
     public String name;
@@ -19,6 +19,7 @@ public class User
     //the amount of Puff you own
     private double wallet = 0;
 
+    protected boolean isSuspended = false;
 
     public User()
     {
@@ -50,8 +51,9 @@ public class User
             System.out.println("Keys couldn't be created: " + e);
         }
 
-
         name = Network.getInstance().GetNewRandomUserName();
+
+        System.out.println("I joined the network: " + name);
     }
 
     //this is called whenever the transaction is verified
@@ -107,6 +109,14 @@ public class User
         return null;
     }
 
+    public void SuspendThread()
+    {
+        isSuspended = true;
+    }
 
+    public void ResumeThread()
+    {
+        isSuspended = false;
+    }
 
 }

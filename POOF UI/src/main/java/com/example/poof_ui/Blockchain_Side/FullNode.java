@@ -1,6 +1,7 @@
 package com.example.poof_ui.Blockchain_Side;
 
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 
 
 //acts as a trusted source of the blockchain
@@ -151,19 +152,39 @@ public class FullNode
         }
     }
 
-    public ArrayList<Block> GetLongestChain()
+    public ArrayList<Block> GetLongestChain() throws IndexOutOfBoundsException
     {
-        int longestSoFar = 1;
-        ArrayList<Block> longestChainSoFar = blockChains.get(0);
-        for (int i = 0; i < blockChains.size(); i++)
+        try
         {
-            if(blockChains.get(i).size() > longestSoFar)
+            int longestSoFar = 1;
+            ArrayList<Block> longestChainSoFar = blockChains.get(0);
+            for (int i = 0; i < blockChains.size(); i++)
             {
-                longestSoFar = blockChains.get(i).size();
-                longestChainSoFar = blockChains.get(i);
+                if(blockChains.get(i).size() > longestSoFar)
+                {
+                    longestSoFar = blockChains.get(i).size();
+                    longestChainSoFar = blockChains.get(i);
+                }
             }
+            return longestChainSoFar;
         }
-        return longestChainSoFar;
+        catch (IndexOutOfBoundsException e)
+        {
+            throw e;
+        }
+    }
+
+    public int GetLongestChainSize()
+    {
+        try
+        {
+            ArrayList longestChain = GetLongestChain();
+            return longestChain.size();
+        }
+        catch (IndexOutOfBoundsException e)
+        {
+            return 0;
+        }
     }
 
 

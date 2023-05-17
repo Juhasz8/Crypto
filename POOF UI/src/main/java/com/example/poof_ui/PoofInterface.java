@@ -11,10 +11,11 @@ import java.io.IOException;
 // PoofInterface class definition
 public class PoofInterface extends Application{
 
+
     // Override start method
     @Override
-    public void start(Stage stage) throws IOException {
-
+    public void start(Stage stage) throws IOException
+    {
         // Load the FXML file
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/Poof-Interface.fxml"));
 
@@ -34,17 +35,10 @@ public class PoofInterface extends Application{
     }
 
     // Main method
-    public static void main(String[] args) {
-
+    public static void main(String[] args)
+    {
         // Launch the JavaFX application
         launch();
-
-        System.out.println("---------------------------------------------");
-
-
-        SimulationManager.getInstance();
-
-        Miner miner1 = new Miner(20, 21);
-        System.out.println("name: " + miner1.name);
     }
+
 }

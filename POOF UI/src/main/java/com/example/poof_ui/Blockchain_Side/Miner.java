@@ -1,5 +1,7 @@
 package com.example.poof_ui.Blockchain_Side;
 
+import com.example.poof_ui.PoofController;
+
 import java.util.Random;
 import java.security.Signature;
 import java.util.ArrayList;
@@ -33,21 +35,29 @@ public class Miner extends User
         //myblock.AddData(Cryptography.ConvertFromTransactionToByte(new TransactionMatch(TransactionType.REWARD, null, publicKeyString, Network.getInstance().GetMinerReward())));
         myblock.AddData(new Transaction(TransactionType.REWARD, null, publicKeyString, Network.getInstance().GetMinerReward()));
 
-        Update();
+        PoofController.getInstance().AddMinerGUI();
     }
 
-    private void Update()
+    public void run()
     {
-        TryToMine();
-        try
+        synchronized (this)
         {
-            Thread.sleep(GetSleepingTime(miningPower)*10);
+            while (true)
+            {
+                try
+                {
+                    while(isSuspended)
+                        wait();
+
+                    TryToMine();
+
+                    Thread.sleep(GetSleepingTime(miningPower) * 10);
+
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
         }
-        catch (Exception e)
-        {
-            System.out.println(e);
-        }
-        Update();
     }
 
     private void TryToMine()
