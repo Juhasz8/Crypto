@@ -2,6 +2,7 @@ package com.example.poof_ui.Blockchain_Side;
 
 import com.example.poof_ui.CurrentEventManager;
 import com.example.poof_ui.PoofController;
+import com.example.poof_ui.PoofInterface;
 import javafx.scene.control.Label;
 
 import java.util.Random;
@@ -99,7 +100,7 @@ public class SimulationManager implements Runnable
             marketPrice = 0;
 
         System.out.println("new market price: " + marketPrice);
-        //marketPriceLabel.setText(String.valueOf(marketPrice));
+        PoofController.getInstance().updateMarketPriceLabel(String.valueOf(marketPrice));
     }
 
     public void SuspendSimulation()

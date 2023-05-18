@@ -9,6 +9,7 @@ import java.util.*;
 import com.example.poof_ui.Blockchain_Side.SimulationManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -64,7 +65,7 @@ public class PoofController implements Initializable {
     @FXML
     private TilePane minersTile;
     @FXML
-    private static Label marketPrice;
+    private Label marketPrice;
 
     // Chart data
     private XYChart.Series series1;
@@ -81,11 +82,6 @@ public class PoofController implements Initializable {
 
     // create an object of Random class
     Random random = new Random();
-
-    public static Label GetMarketPriceLabel()
-    {
-        return marketPrice;
-    }
 
     public static PoofController instance;
     public CurrentEventManager eventManager = new CurrentEventManager();
@@ -222,6 +218,10 @@ public class PoofController implements Initializable {
         tradersTile.getChildren().add(traderGUI);
     }
 
+    public void updateMarketPriceLabel(String newText) {
+        Platform.runLater(() -> marketPrice.setText(newText));
+    }
+
     public static PoofController getInstance()
     {
         return instance;
@@ -250,6 +250,7 @@ public class PoofController implements Initializable {
 
         // Call the start method of the new instance with the current stage
         poofApp.start(stage);
+        //SimulationManager.getInstance().RestartSimulation();
     }
     @FXML
     void buyPoofs(ActionEvent event) throws IOException {

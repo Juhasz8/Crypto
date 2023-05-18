@@ -263,7 +263,7 @@
                                                    <children>
                                                       <Label fx:id="marketPrice" text="0" textFill="WHITE">
                                                          <font>
-                                                            <Font name="Arial Bold" size="48.0" />
+                                                            <Font name="Arial Bold" size="36.0" />
                                                          </font>
                                                       </Label>
                                                       <Label text="EUR" textFill="WHITE">
