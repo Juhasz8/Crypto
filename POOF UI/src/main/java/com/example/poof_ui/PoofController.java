@@ -24,6 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -93,14 +94,13 @@ public class PoofController implements Initializable {
 
         instance = this;
 
-
         // Initialize chart data
         series1 = new XYChart.Series();
-        lineChart.getData().addAll(series1);
+        Platform.runLater(() -> lineChart.getData().addAll(series1));
+        series1.getData().add(new XYChart.Data<>(String.valueOf(0), 0));
+
         // Initialize chart animation
         timeline = new Timeline(new KeyFrame(Duration.seconds(2.5), event -> {
-
-
 
             // Timeline Counter
             // Increment the years, months, and weeks passed
@@ -116,34 +116,6 @@ public class PoofController implements Initializable {
             label_Years.setText(String.valueOf(yearsPassed));
             label_Months.setText(String.valueOf(monthsPassed));
             label_Weeks.setText(String.valueOf(weeksPassed));
-
-            // Generate a new data point with a random value between 0 and 2
-            double randomNumber = Math.random() * 2;
-            series1.getData().add(new XYChart.Data<>(String.valueOf(series1.getData().size() + 1), randomNumber));
-
-            // Keep track of the last two values in the chart
-            lastTwoValues.add(randomNumber);
-            if (lastTwoValues.size() > 2) {
-                lastTwoValues.remove(0);
-            }
-
-            // Change the color of the line according to if it's more or less
-            String redColor = "-fx-stroke: #FF0000;";
-            String greenColor = "-fx-stroke: #73B902;";
-            if (lastTwoValues.size() == 2) {
-                if (lastTwoValues.get(1) > lastTwoValues.get(0)) {
-                    series1.getNode().setStyle(greenColor);
-                } else {
-                    series1.getNode().setStyle(redColor);
-                }
-            }
-
-            // Increase the preferred width of the chart by 30 pixels
-            double currentPrefWidth = lineChart.getPrefWidth();
-            lineChart.setPrefWidth(currentPrefWidth + 30);
-
-            // Scroll the chart to the right to show the latest data point
-            chartScroll.setHvalue(1);
 
             // Add transaction blocks
             TransactionBlock transactionBlock = new TransactionBlock();
@@ -249,6 +221,40 @@ public class PoofController implements Initializable {
             }
         }
     }
+
+    public void updatePriceGraph(String Price) {
+
+        // Parse the Price string to a numeric type (e.g., Double)
+        double priceValue = Double.parseDouble(Price);
+
+        // Generate a new data point
+        Platform.runLater(() -> series1.getData().add(new XYChart.Data<>(String.valueOf(series1.getData().size() + 1), priceValue)));
+
+        // Keep track of the last two values in the chart
+        lastTwoValues.add(priceValue);
+        if (lastTwoValues.size() > 2) {
+            lastTwoValues.remove(0);
+        }
+
+        // Change the color of the line according to if it's more or less
+        String redColor = "-fx-stroke: #FF0000;";
+        String greenColor = "-fx-stroke: #73B902;";
+        if (lastTwoValues.size() == 2) {
+            if (lastTwoValues.get(1) > lastTwoValues.get(0)) {
+                series1.getNode().setStyle(greenColor);
+            } else {
+                series1.getNode().setStyle(redColor);
+            }
+        }
+
+        // Increase the preferred width of the chart by 30 pixels
+        double currentPrefWidth = lineChart.getPrefWidth();
+        Platform.runLater(() -> lineChart.setPrefWidth(currentPrefWidth + 30));
+
+        // Scroll the chart to the right to show the latest data point
+        Platform.runLater(() -> chartScroll.setHvalue(1));
+    }
+
 
     public static PoofController getInstance()
     {
