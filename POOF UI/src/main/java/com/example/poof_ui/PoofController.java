@@ -152,18 +152,6 @@ public class PoofController implements Initializable {
             TransactionBlock transactionBlock = new TransactionBlock();
             blockchain_Tile.getChildren().add(transactionBlock);
 
-
-            //MOVED THIS TO THE SIMULATIONMANAGER, cause the eventmanager shouldn't be recreated every loop
-
-            // Add a CurrentEvent
-            /*
-            CurrentEventManager currentEvent = new CurrentEventManager();
-            if (currentEvent != null) {
-                currentEvents.getChildren().add(currentEvent.getEvent());
-            }
-            */
-
-
             if(eventIndex == 1)
             {
                 PotentiallyMakeEvent();

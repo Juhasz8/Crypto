@@ -17,9 +17,9 @@ public class Miner extends User
     private Block myblock;
     private int nonce;
 
-    //this is the previous trusted hash, which means, if the last block was mined by me, its the hash of that block.
+    //this is the previous-trusted hash, which means, if the last block was mined by me, it's the hash of that block.
     //if it was mined by someone else, and that block matches up with my block, it becomes that blocks hash.
-    //if it was miney by someone else, but that block doesnt match up, the previoustrustedhash doesnt change
+    //if it was mined by someone else, but that block doesn't match up, the previous trusted hash doesn't change
     private String previousTrustedHash;
 
     public Miner(int minPower, int maxPower)
@@ -70,7 +70,7 @@ public class Miner extends User
 
         if(hash.substring(0, Network.getInstance().GetDifficulty()).equals(target))
         {
-            //New Block mined succesfully
+            //New Block mined successfully
             IMinedABlockSuccessfully(hash);
         }
         else
@@ -158,7 +158,7 @@ public class Miner extends User
         //otherwise we will just wait until new blocks are mined
 
 
-        //if a miner who is unlucky and didnt mine the block, gets notified of a block that was mined
+        //if a miner who is unlucky and didn't mine the block, gets notified of a block that was mined
         //he will check if that block is the same that he has. If they match up, he will discard his current block
         //because from his point of view, in his belief, that block which was just mined is going to become a trusted block later.
         //otherwise, he will keep working on his current block, because the block which was just mined was either a sneaky block, or this miner is working on a sneaky block himself
@@ -167,7 +167,7 @@ public class Miner extends User
 
     public void SomebodyElseMinedABlock(Block newBlock)
     {
-        //the previoushash will be updated according to the relation between my current block i am working on and this new block that was mined by someone else
+        //the previous hash will be updated according to the relation between my current block I am working on and this new block that was mined by someone else
         //we do this check simply by comparing the merkle root of the new block that was mined and the block I am trying to mine
     }
 

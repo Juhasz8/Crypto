@@ -83,7 +83,7 @@ public class SimulationManager implements Runnable
             return;
 
         //I need a reference to all the transaction requests that has happened since the last update cycle
-        //based on their amounts, we change the value of marketprice
+        //based on their amounts, we change the value of market price
 
         //if(Network.getInstance().networkUsers.size() > 1)
 
