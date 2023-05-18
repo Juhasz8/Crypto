@@ -5,6 +5,7 @@ import com.example.poof_ui.PoofController;
 import com.example.poof_ui.PoofInterface;
 import javafx.scene.control.Label;
 
+import java.text.DecimalFormat;
 import java.util.Random;
 
 public class SimulationManager implements Runnable
@@ -100,6 +101,7 @@ public class SimulationManager implements Runnable
             marketPrice = 0;
 
         System.out.println("new market price: " + marketPrice);
+
         PoofController.getInstance().updateMarketPriceLabel(String.valueOf(marketPrice));
     }
 

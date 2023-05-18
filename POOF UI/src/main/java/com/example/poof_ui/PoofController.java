@@ -4,6 +4,7 @@ package com.example.poof_ui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import com.example.poof_ui.Blockchain_Side.SimulationManager;
@@ -218,8 +219,35 @@ public class PoofController implements Initializable {
         tradersTile.getChildren().add(traderGUI);
     }
 
-    public void updateMarketPriceLabel(String newText) {
-        Platform.runLater(() -> marketPrice.setText(newText));
+    public void updateMarketPriceLabel(String Price) {
+        float previousPrice = Float.valueOf(marketPrice.getText());
+        float priceFloat = Float.valueOf(Price);
+
+        if (priceFloat == previousPrice) {
+            return; // No need to update if the prices are the same
+        }
+
+        float increment = (priceFloat - previousPrice) / 200; // Calculate the increment per step (200 steps in 2 seconds)
+
+        while (previousPrice < priceFloat) {
+            previousPrice += increment;
+            if (previousPrice > priceFloat) {
+                previousPrice = priceFloat; // Ensure the final price is reached accurately
+            }
+
+            float finalPreviousPrice = previousPrice;
+            // Create a DecimalFormat instance with the desired pattern
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            // Format the float value to two decimal places
+            String formattedPrice = decimalFormat.format(finalPreviousPrice);
+            Platform.runLater(() -> marketPrice.setText(String.valueOf(formattedPrice)));
+
+            try {
+                Thread.sleep(20); // Sleep for 20 milliseconds between each step
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static PoofController getInstance()
