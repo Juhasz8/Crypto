@@ -69,6 +69,9 @@ public class PoofController implements Initializable {
     @FXML
     private Label marketPrice;
 
+    @FXML
+    private Label marketPercentage;
+
     // Chart data
     private XYChart.Series series1;
     private List<Double> lastTwoValues = new ArrayList<>();
@@ -191,13 +194,42 @@ public class PoofController implements Initializable {
         tradersTile.getChildren().add(traderGUI);
     }
 
-    public void updateMarketPriceLabel(String Price) {
+    public void updateMarketPriceLabel(String Price){
         float currentPrice = Float.valueOf(Price);
         DecimalFormat decimalFormat = new DecimalFormat("€#.##");
         String formattedPrice = decimalFormat.format(currentPrice);
         Platform.runLater(() -> marketPrice.setText(String.valueOf(formattedPrice)));
     }
 
+    // Declare the previousPrice as a class member variable
+    private float previousPrice = 0;
+
+    // Declare colors
+    private String redColor = "-fx-stroke: #ff5e57;";
+    private String greenColor = "-fx-stroke: #4FCB59;";
+    private String textGreenColor = "-fx-text-fill: #4FCB59;";
+    private String textRedColor = "-fx-text-fill: #ff5e57;";
+
+    public void updateMarketPercentageLabel(String price) {
+        float currentPrice = Float.valueOf(price);
+        float percentage = ((currentPrice - previousPrice) / currentPrice);
+        previousPrice = currentPrice; // Update the previousPrice with the currentPrice
+
+        DecimalFormat decimalFormat = new DecimalFormat("+#.##%;-#.##%");
+        String formattedPercentage = decimalFormat.format(percentage); // Create the formatting
+
+        if (currentPrice != 0) {
+            Platform.runLater(() -> marketPercentage.setText(formattedPercentage)); // Change the text label
+        } else {
+            Platform.runLater(() -> marketPercentage.setText("-100%")); // If the price is 0
+        }
+
+        if (percentage > 0) {
+            Platform.runLater(() -> marketPercentage.setStyle(textGreenColor)); // Change text to green
+        } else {
+            Platform.runLater(() -> marketPercentage.setStyle(textRedColor)); // Change text to red
+        }
+    }
     public void updatePriceGraph(String Price) {
 
         // Parse the Price string to a numeric type (e.g., Double)
@@ -213,8 +245,7 @@ public class PoofController implements Initializable {
         }
 
         // Change the color of the line according to if it's more or less
-        String redColor = "-fx-stroke: #FF0000;";
-        String greenColor = "-fx-stroke: #73B902;";
+
         if (lastTwoValues.size() == 2) {
             if (lastTwoValues.get(1) > lastTwoValues.get(0)) {
                 series1.getNode().setStyle(greenColor);

@@ -270,7 +270,7 @@
                                                 </HBox>
                                                 <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
                                                    <children>
-                                                      <Label text="+0%" textFill="WHITE">
+                                                      <Label fx:id="marketPercentage" text="+0%" textFill="WHITE">
                                                          <font>
                                                             <Font name="Arial Bold" size="18.0" />
                                                          </font>

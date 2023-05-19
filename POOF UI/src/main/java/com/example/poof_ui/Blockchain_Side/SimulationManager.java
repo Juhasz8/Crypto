@@ -106,6 +106,8 @@ public class SimulationManager implements Runnable
         PoofController.getInstance().updateMarketPriceLabel(String.valueOf(marketPrice));
         // Update Price Graph
         PoofController.getInstance().updatePriceGraph(String.valueOf(marketPrice));
+        // Update Price Percentage
+        PoofController.getInstance().updateMarketPercentageLabel(String.valueOf(marketPrice));
     }
 
     public void SuspendSimulation()
