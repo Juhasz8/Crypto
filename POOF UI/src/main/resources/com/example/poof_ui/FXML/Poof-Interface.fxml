@@ -266,11 +266,6 @@
                                                             <Font name="Arial Bold" size="36.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label text="EUR" textFill="WHITE">
-                                                         <font>
-                                                            <Font name="Arial Bold" size="18.0" />
-                                                         </font>
-                                                      </Label>
                                                    </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
