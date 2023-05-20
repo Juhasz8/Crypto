@@ -31,7 +31,6 @@ public class Network
     private ArrayList<Trader> traders = new ArrayList<>();
 
     // an array of random names
-    private String[] names = new String[] { "Alfred", "Bob", "Steve" };
     private int[] amountOfUsedNames = new int[3];
 
     private Random rand = new Random();
@@ -53,18 +52,6 @@ public class Network
         {
             amountOfUsedNames[i] = 0;
         }
-    }
-
-    public String GetNewRandomUserName()
-    {
-        int index = rand.nextInt(names.length);
-        String name = names[index];
-        amountOfUsedNames[index]++;
-
-        if(amountOfUsedNames[index] > 1)
-            name += " " + amountOfUsedNames[index];
-
-        return name;
     }
 
     private void TryToMatch()

@@ -2,9 +2,8 @@ package com.example.poof_ui.Blockchain_Side;
 
 import com.example.poof_ui.PoofController;
 
-import java.util.Random;
+import java.util.*;
 import java.security.Signature;
-import java.util.ArrayList;
 
 public class Miner extends User
 {
@@ -22,7 +21,7 @@ public class Miner extends User
     //if it was mined by someone else, but that block doesn't match up, the previous trusted hash doesn't change
     private String previousTrustedHash;
 
-    public Miner(int minPower, int maxPower)
+    public Miner(String minerCategory, int minPower, int maxPower)
     {
         super();
         rand = new Random();
@@ -36,6 +35,53 @@ public class Miner extends User
         myblock.AddData(new Transaction(TransactionType.REWARD, null, publicKeyString, Network.getInstance().GetMinerReward()));
 
         PoofController.getInstance().AddMinerGUI();
+    }
+
+    public static Miner getMiner() {
+        // Create separate categories of miners
+        List<Miner> minerCategories = Arrays.asList(
+        new Miner("BigCompany",100,120),
+        new Miner("SmallCompany",50,70),
+        new Miner("BigGroup",30,50),
+        new Miner("SmallGroup",2,30),
+        new Miner("Individual", 1,2)
+        );
+
+        // Create the chances of getting picked
+        Map<String, List<Integer>> dictionary = Map.of(
+        "BigCompany", List.of(0,6),
+        "SmallCompany", List.of(6,16),
+        "BigGroup", List.of(16,31),
+        "SmallGroup", List.of(31,61),
+        "Individual", List.of(61,101)
+        );
+
+        Random randomNumber  = new Random();
+        int myRandomNumber  = randomNumber.nextInt(0,101);
+        String myKey = "";
+
+        for (Map.Entry<String, List<Integer>> entry : dictionary.entrySet()) {
+            String key = entry.getKey();
+            List<Integer> value = entry.getValue();
+
+            if (myRandomNumber > value.get(0) && myRandomNumber < value.get(1)) {
+                myKey = key; // Set myKey to the corresponding key value
+            }
+        }
+
+        if (myKey.equals("BigCompany")) {
+            return minerCategories.get(0);
+        } else if (myKey.equals("SmallCompany")) {
+            return minerCategories.get(1);
+        } else if (myKey.equals("BigGroup")) {
+            return minerCategories.get(2);
+        } else if (myKey.equals("SmallGroup")) {
+            return minerCategories.get(3);
+        } else if (myKey.equals("Individual")) {
+            return minerCategories.get(4);
+        }
+        return null;
+
     }
 
     public void run()

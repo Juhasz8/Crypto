@@ -2,16 +2,14 @@ package com.example.poof_ui.Blockchain_Side;
 
 import com.example.poof_ui.CurrentEventManager;
 import com.example.poof_ui.PoofController;
-import com.example.poof_ui.PoofInterface;
-import javafx.scene.control.Label;
 
-import java.text.DecimalFormat;
 import java.util.Random;
 
 public class SimulationManager implements Runnable
 {
     private static SimulationManager instance;
     //creates the User objects and the threads
+    private Miner miner;
 
     public CurrentEventManager eventManager;
 
@@ -28,11 +26,10 @@ public class SimulationManager implements Runnable
         return instance;
     }
 
-    private SimulationManager()
-    {
-        //make the very first miner join the network
-        Miner miner1 = new Miner(20, 21);
-        miner1.start();
+    private SimulationManager() {
+        // Make the very first miner join the network
+        miner = Miner.getMiner(); // Create a single miner
+        miner.start(); // Start the miner thread
     }
 
     public void run()
