@@ -54,6 +54,31 @@ public class Network
         }
     }
 
+<<<<<<< HEAD
+    public String GetNewRandomUserName()
+    {
+        int index = rand.nextInt(names.length);
+        String name = names[index];
+        amountOfUsedNames[index]++;
+
+        if(amountOfUsedNames[index] > 1)
+            name += " " + amountOfUsedNames[index];
+
+        return name;
+    }
+
+    public int GetMinerAmount()
+    {
+        return miners.size();
+    }
+
+    public int GetTraderAmount()
+    {
+        return traders.size();
+    }
+
+=======
+>>>>>>> 9e1f722fe745c975296240119ff0c322a1e34566
     private void TryToMatch()
     {
 

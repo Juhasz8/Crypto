@@ -138,7 +138,7 @@
                               <Font name="Arial Bold" size="12.0" />
                            </font>
                         </Label>
-                        <Label text="USD" textFill="WHITE">
+                        <Label text="EUR" textFill="WHITE">
                            <font>
                               <Font name="Arial Bold" size="12.0" />
                            </font>
@@ -263,19 +263,14 @@
                                                    <children>
                                                       <Label fx:id="marketPrice" text="0" textFill="WHITE">
                                                          <font>
-                                                            <Font name="Arial Bold" size="48.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Label text="EUR" textFill="WHITE">
-                                                         <font>
-                                                            <Font name="Arial Bold" size="24.0" />
+                                                            <Font name="Arial Bold" size="36.0" />
                                                          </font>
                                                       </Label>
                                                    </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
                                                    <children>
-                                                      <Label text="+0%" textFill="WHITE">
+                                                      <Label fx:id="marketPercentage" text="+0%" textFill="WHITE">
                                                          <font>
                                                             <Font name="Arial Bold" size="18.0" />
                                                          </font>

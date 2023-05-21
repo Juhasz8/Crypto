@@ -23,10 +23,14 @@ public class Miner extends User
     //if it was mined by someone else, but that block doesn't match up, the previous trusted hash doesn't change
     private String previousTrustedHash;
 
+<<<<<<< HEAD
     public MinerType type;
 
     //this constructor should probably only take the actual mining power and the type of the miner. The power is calculated in the simulationmanager
     public Miner(int minPower, int maxPower, MinerType type)
+=======
+    public Miner(String minerCategory, int minPower, int maxPower)
+>>>>>>> 9e1f722fe745c975296240119ff0c322a1e34566
     {
         super();
         rand = new Random();

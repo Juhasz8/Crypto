@@ -26,11 +26,18 @@ public class SimulationManager implements Runnable
         return instance;
     }
 
+<<<<<<< HEAD
     private SimulationManager()
     {
         //make the very first miner join the network
         Miner miner1 = new Miner(20, 21, MinerType.THAT_ONE_GUY);
         miner1.start();
+=======
+    private SimulationManager() {
+        // Make the very first miner join the network
+        miner = Miner.getMiner(); // Create a single miner
+        miner.start(); // Start the miner thread
+>>>>>>> 9e1f722fe745c975296240119ff0c322a1e34566
     }
 
     public void run()

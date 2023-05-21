@@ -4,11 +4,13 @@ package com.example.poof_ui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import com.example.poof_ui.Blockchain_Side.SimulationManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,6 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -64,7 +67,10 @@ public class PoofController implements Initializable {
     @FXML
     private TilePane minersTile;
     @FXML
-    private static Label marketPrice;
+    private Label marketPrice;
+
+    @FXML
+    private Label marketPercentage;
 
     // Chart data
     private XYChart.Series series1;
@@ -82,11 +88,6 @@ public class PoofController implements Initializable {
     // create an object of Random class
     Random random = new Random();
 
-    public static Label GetMarketPriceLabel()
-    {
-        return marketPrice;
-    }
-
     public static PoofController instance;
     public CurrentEventManager eventManager = new CurrentEventManager();
 
@@ -96,14 +97,13 @@ public class PoofController implements Initializable {
 
         instance = this;
 
-
         // Initialize chart data
         series1 = new XYChart.Series();
-        lineChart.getData().addAll(series1);
+        Platform.runLater(() -> lineChart.getData().addAll(series1));
+        series1.getData().add(new XYChart.Data<>(String.valueOf(0), 0));
+
         // Initialize chart animation
         timeline = new Timeline(new KeyFrame(Duration.seconds(2.5), event -> {
-
-
 
             // Timeline Counter
             // Increment the years, months, and weeks passed
@@ -120,49 +120,9 @@ public class PoofController implements Initializable {
             label_Months.setText(String.valueOf(monthsPassed));
             label_Weeks.setText(String.valueOf(weeksPassed));
 
-            // Generate a new data point with a random value between 0 and 2
-            double randomNumber = Math.random() * 2;
-            series1.getData().add(new XYChart.Data<>(String.valueOf(series1.getData().size() + 1), randomNumber));
-
-            // Keep track of the last two values in the chart
-            lastTwoValues.add(randomNumber);
-            if (lastTwoValues.size() > 2) {
-                lastTwoValues.remove(0);
-            }
-
-            // Change the color of the line according to if it's more or less
-            String redColor = "-fx-stroke: #FF0000;";
-            String greenColor = "-fx-stroke: #73B902;";
-            if (lastTwoValues.size() == 2) {
-                if (lastTwoValues.get(1) > lastTwoValues.get(0)) {
-                    series1.getNode().setStyle(greenColor);
-                } else {
-                    series1.getNode().setStyle(redColor);
-                }
-            }
-
-            // Increase the preferred width of the chart by 30 pixels
-            double currentPrefWidth = lineChart.getPrefWidth();
-            lineChart.setPrefWidth(currentPrefWidth + 30);
-
-            // Scroll the chart to the right to show the latest data point
-            chartScroll.setHvalue(1);
-
             // Add transaction blocks
             TransactionBlock transactionBlock = new TransactionBlock();
             blockchain_Tile.getChildren().add(transactionBlock);
-
-
-            //MOVED THIS TO THE SIMULATIONMANAGER, cause the eventmanager shouldn't be recreated every loop
-
-            // Add a CurrentEvent
-            /*
-            CurrentEventManager currentEvent = new CurrentEventManager();
-            if (currentEvent != null) {
-                currentEvents.getChildren().add(currentEvent.getEvent());
-            }
-            */
-
 
             if(eventIndex == 1)
             {
@@ -234,6 +194,75 @@ public class PoofController implements Initializable {
         tradersTile.getChildren().add(traderGUI);
     }
 
+    public void updateMarketPriceLabel(String Price){
+        float currentPrice = Float.valueOf(Price);
+        DecimalFormat decimalFormat = new DecimalFormat("€#.##");
+        String formattedPrice = decimalFormat.format(currentPrice);
+        Platform.runLater(() -> marketPrice.setText(String.valueOf(formattedPrice)));
+    }
+
+    // Declare the previousPrice as a class member variable
+    private float previousPrice = 0;
+
+    // Declare colors
+    private String redColor = "-fx-stroke: #ff5e57;";
+    private String greenColor = "-fx-stroke: #4FCB59;";
+    private String textGreenColor = "-fx-text-fill: #4FCB59;";
+    private String textRedColor = "-fx-text-fill: #ff5e57;";
+
+    public void updateMarketPercentageLabel(String price) {
+        float currentPrice = Float.valueOf(price);
+        float percentage = ((currentPrice - previousPrice) / currentPrice);
+        previousPrice = currentPrice; // Update the previousPrice with the currentPrice
+
+        DecimalFormat decimalFormat = new DecimalFormat("+#.##%;-#.##%");
+        String formattedPercentage = decimalFormat.format(percentage); // Create the formatting
+
+        if (currentPrice != 0) {
+            Platform.runLater(() -> marketPercentage.setText(formattedPercentage)); // Change the text label
+        } else {
+            Platform.runLater(() -> marketPercentage.setText("-100%")); // If the price is 0
+        }
+
+        if (percentage > 0) {
+            Platform.runLater(() -> marketPercentage.setStyle(textGreenColor)); // Change text to green
+        } else {
+            Platform.runLater(() -> marketPercentage.setStyle(textRedColor)); // Change text to red
+        }
+    }
+    public void updatePriceGraph(String Price) {
+
+        // Parse the Price string to a numeric type (e.g., Double)
+        double priceValue = Double.parseDouble(Price);
+
+        // Generate a new data point
+        Platform.runLater(() -> series1.getData().add(new XYChart.Data<>(String.valueOf(series1.getData().size() + 1), priceValue)));
+
+        // Keep track of the last two values in the chart
+        lastTwoValues.add(priceValue);
+        if (lastTwoValues.size() > 2) {
+            lastTwoValues.remove(0);
+        }
+
+        // Change the color of the line according to if it's more or less
+
+        if (lastTwoValues.size() == 2) {
+            if (lastTwoValues.get(1) > lastTwoValues.get(0)) {
+                series1.getNode().setStyle(greenColor);
+            } else {
+                series1.getNode().setStyle(redColor);
+            }
+        }
+
+        // Increase the preferred width of the chart by 30 pixels
+        double currentPrefWidth = lineChart.getPrefWidth();
+        Platform.runLater(() -> lineChart.setPrefWidth(currentPrefWidth + 30));
+
+        // Scroll the chart to the right to show the latest data point
+        Platform.runLater(() -> chartScroll.setHvalue(1));
+    }
+
+
     public static PoofController getInstance()
     {
         return instance;
@@ -262,6 +291,7 @@ public class PoofController implements Initializable {
 
         // Call the start method of the new instance with the current stage
         poofApp.start(stage);
+        //SimulationManager.getInstance().RestartSimulation();
     }
     @FXML
     void buyPoofs(ActionEvent event) throws IOException {

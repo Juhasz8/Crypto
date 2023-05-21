@@ -51,7 +51,7 @@ public class User extends Thread
             System.out.println("Keys couldn't be created: " + e);
         }
 
-        name = Network.getInstance().GetNewRandomUserName();
+        name = "minerName";
 
         System.out.println("I joined the network: " + name);
     }
