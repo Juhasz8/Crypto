@@ -49,11 +49,11 @@ public class Miner extends User
     public static Miner getMiner() {
         // Create separate categories of miners
         List<Miner> minerCategories = Arrays.asList(
-        new Miner("BigCompany",100,120),
-        new Miner("SmallCompany",50,70),
-        new Miner("BigGroup",30,50),
-        new Miner("SmallGroup",2,30),
-        new Miner("Individual", 1,2)
+        new Miner(100,120, MinerType.HUGE_CORP),
+        new Miner(50,70, MinerType.SMALL_CORP),
+        new Miner(30,50, MinerType.GROUP),
+        new Miner(2,30, MinerType.THESE_GUYS),
+        new Miner(1,2, MinerType.THAT_ONE_GUY)
         );
 
         // Create the chances of getting picked

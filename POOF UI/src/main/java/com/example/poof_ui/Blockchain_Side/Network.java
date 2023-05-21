@@ -161,4 +161,9 @@ public class Network
             miners.get(i).ReceiveNewBlockWasMinedInformation(newBlock);
         }
     }
+
+    public int GetTraderAmount()
+    {
+        return traders.size();
+    }
 }
