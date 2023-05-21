@@ -67,6 +67,16 @@ public class Network
         return name;
     }
 
+    public int GetMinerAmount()
+    {
+        return miners.size();
+    }
+
+    public int GetTraderAmount()
+    {
+        return traders.size();
+    }
+
     private void TryToMatch()
     {
 

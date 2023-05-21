@@ -29,7 +29,7 @@ public class SimulationManager implements Runnable
     private SimulationManager()
     {
         //make the very first miner join the network
-        Miner miner1 = new Miner(20, 21);
+        Miner miner1 = new Miner(20, 21, MinerType.THAT_ONE_GUY);
         miner1.start();
     }
 
@@ -66,10 +66,24 @@ public class SimulationManager implements Runnable
         //create the user objects and their threads respectively
 
         //decide how many miner will join
+        //depends on the amount of miners currently on the market, and the value of the currency and some random factor
+
 
         //decide how many trader will join
+        //depends on the amount of traders currently on the market, and the value of the currency and some random factor
+        //1 + 1/(n+1)
+        if(Network.getInstance().GetTraderAmount() == 0)
+        {
+            Trader myGuy = new Trader();
+            myGuy.start();
+        }
 
-        //join the traders and networks
+
+        //we will decide the miner and trader type here, and not in the miner and trader constructor.
+        //and the constructor asks for a miner or trader type parameter
+
+        //join the traders and miners to the network
+
 
 
     }

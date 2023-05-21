@@ -5,6 +5,8 @@ import com.example.poof_ui.PoofController;
 import java.security.PublicKey;
 import java.security.Signature;
 
+enum TraderType { RISK_APPETITE, TREND_FOLLOWER, CONTRARIAN_APPROACH, EVENT_FOLLOWER, PSYCHOPATH }
+
 public class Trader extends User
 {
 

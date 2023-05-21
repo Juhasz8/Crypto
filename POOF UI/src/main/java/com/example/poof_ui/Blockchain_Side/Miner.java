@@ -6,6 +6,8 @@ import java.util.Random;
 import java.security.Signature;
 import java.util.ArrayList;
 
+enum MinerType { THAT_ONE_GUY, THESE_GUYS, GROUP, SMALL_CORP, HUGE_CORP }
+
 public class Miner extends User
 {
     private int miningPower;
@@ -22,14 +24,21 @@ public class Miner extends User
     //if it was miney by someone else, but that block doesnt match up, the previoustrustedhash doesnt change
     private String previousTrustedHash;
 
-    public Miner(int minPower, int maxPower)
+    public MinerType type;
+
+    //this constructor should probably only take the actual mining power and the type of the miner. The power is calculated in the simulationmanager
+    public Miner(int minPower, int maxPower, MinerType type)
     {
         super();
         rand = new Random();
+        this.type = type;
         miningPower = minPower + rand.nextInt(maxPower-minPower); // -> generate a random number between minPower and maxPower
         //Update();
         Network.getInstance().JoinMinerToTheNetwork(this);
 
+        //we might not want the last trusted block here ?
+        //or maybe he will take the last trusted block, create his own blocks, but instead of mining,
+        //he just compares to the untrusted blocks and if he gets to the same conclusion then on one of the chains, then he follows up on that chain
         myblock = new Block(null, Network.getInstance().fullNode.GetLastTrustedBlockHash());
         previousTrustedHash = Network.getInstance().fullNode.GetLastTrustedBlockHash();
         //myblock.AddData(Cryptography.ConvertFromTransactionToByte(new TransactionMatch(TransactionType.REWARD, null, publicKeyString, Network.getInstance().GetMinerReward())));
