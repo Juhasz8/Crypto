@@ -8,15 +8,17 @@ import java.util.EmptyStackException;
 public class FullNode
 {
 
-    public Block block1 = new Block(null, null);
+    public FullNodeBlock block1 = new FullNodeBlock(new Block(null, null), null);
 
-    public Block lastTrustedBlock;
+    public FullNodeBlock lastTrustedBlock;
     //this will be the blockchains and the trusted blockchain
-    private ArrayList<ArrayList<Block>> blockChains = new ArrayList<>();
+    private ArrayList<ArrayList<FullNodeBlock>> blockChains = new ArrayList<>();
 
     private int lastTrustedBlockIndex = 0;
 
     private int blockTrustingLimit = 2;   //this means in this blockchain:  A(first block is already trusted) -> B -> C -> D   ----> B gets trusted after D is mined
+
+    public ArrayList<Transaction> waitingTransSinceLastTrustedBlock = new ArrayList<>();
 
     public FullNode()
     {
@@ -28,38 +30,38 @@ public class FullNode
         if(lastTrustedBlock == null)
             return "-";
         else
-            return lastTrustedBlock.hash;
+            return lastTrustedBlock.block.hash;
     }
 
-    public void NotifyNodeThatNewBlockWasMined(Block newBlock)
+    public void NotifyNodeThatNewBlockWasMined(FullNodeBlock newFullNodeBlock)
     {
         //in the case of the very first blockchain that was mined and added, we just add it and trust it immediately (cause its data is empty anyways)
         if(blockChains.size() == 0)
         {
             System.out.println("VERY FIRST BLOCK ADDED TO THE CHAIN");
             blockChains.add(new ArrayList<>(){});
-            blockChains.get(0).add(newBlock);
-            TrustABlock(newBlock);
+            blockChains.get(0).add(newFullNodeBlock);
+            TrustABlock(newFullNodeBlock);
             DebugPrintingOfBlockchains();
             return;
         }
 
         boolean conflictHappened = false;
         //check whether there is a conflict
-        ArrayList<Block> longestChain = GetLongestChain();
+        ArrayList<FullNodeBlock> longestChain = GetLongestChain();
         for(int i = lastTrustedBlockIndex; i < longestChain.size(); i++)
         {
-            if(newBlock.previousHash == longestChain.get(i).previousHash)
+            if(newFullNodeBlock.block.previousHash == longestChain.get(i).block.previousHash)
             {
                 //Conflict at block number I!!
 
                 //branch apart from the current longestChain
-                ArrayList<Block> branch = new ArrayList<>();
+                ArrayList<FullNodeBlock> branch = new ArrayList<>();
                 for (int j=0; j < i; j++)
                 {
                     branch.add(longestChain.get(j));
                 }
-                branch.add(newBlock);
+                branch.add(newFullNodeBlock);
                 blockChains.add(branch);
 
                 conflictHappened = true;
@@ -72,10 +74,10 @@ public class FullNode
             //and add the new block to the currect blockchain
             for (int i = 0; i < blockChains.size(); i++)
             {
-                if(blockChains.get(i).get(blockChains.get(i).size()-1).hash == newBlock.previousHash)
+                if(blockChains.get(i).get(blockChains.get(i).size()-1).block.hash == newFullNodeBlock.block.previousHash)
                 {
                     //System.out.println("added a new block on an existing chain! ");
-                    blockChains.get(i).add(newBlock);
+                    blockChains.get(i).add(newFullNodeBlock);
                     break;
                 }
                 else if(i == blockChains.size()-1)
@@ -87,7 +89,7 @@ public class FullNode
             if(longestChain.size() >= 4)
             {
                 lastTrustedBlockIndex++;
-                Block blockToBeTrusted = longestChain.get(lastTrustedBlockIndex);
+                FullNodeBlock blockToBeTrusted = longestChain.get(lastTrustedBlockIndex);
                 TrustABlock(longestChain.get(lastTrustedBlockIndex));
 
                 //remove all the branch chains, which has a size less or equal to the longest one - difficulty
@@ -114,7 +116,7 @@ public class FullNode
                 System.out.println();
             for (int j = 0; j < blockChains.get(i).size(); j++)
             {
-                if(blockChains.get(i).get(j).isTrusted)
+                if(blockChains.get(i).get(j).block.isTrusted)
                     System.out.print(" -> " + j + "(T)");
                 else
                     System.out.print(" -> " + j + "(?)");
@@ -124,10 +126,10 @@ public class FullNode
         System.out.println("--------------------");
     }
 
-    private void TrustABlock(Block block)
+    private void TrustABlock(FullNodeBlock fullNodeblock)
     {
-        lastTrustedBlock = block;
-        block.isTrusted = true;
+        lastTrustedBlock = fullNodeblock;
+        fullNodeblock.block.isTrusted = true;
 
         //we basically do all the transactions on this block ledger
         //so everyone gets his money and poffcoin, and the miner gets the rewards and fee aswell
@@ -137,27 +139,41 @@ public class FullNode
 
         //ByteArrayInputStream bos = new ByteArrayInputStream(block.GetData());
         //DataInputStream dos = new DataInputStream(bos);
-        for(int i = 0; i < block.dataTree.transactions.size(); i++)
+
+        //miner gets reward
+        Network.getInstance().networkUsers.get(fullNodeblock.luckyMinerPublicKey).IncreaseWallet(Network.getInstance().GetMinerReward());
+
+        for(int i = 0; i < fullNodeblock.block.dataTree.transactions.size(); i++)
         {
-            Transaction transaction = block.dataTree.transactions.get(i);
+            Transaction transaction = fullNodeblock.block.dataTree.transactions.get(i);
+
+            if(waitingTransSinceLastTrustedBlock.contains(transaction))
+                waitingTransSinceLastTrustedBlock.remove(transaction);
+            else
+                System.out.println("Something went wrong! The full node doesn't recognize a transaction!");
 
             if(transaction.type == TransactionType.NORMAL)
             {
                 User fromUser = Network.getInstance().networkUsers.get(transaction.fromPublicKey);
-                fromUser.IncreaseWallet(-transaction.amount);
+                //from the user the actual amount is getting deducted
+                fromUser.IncreaseWallet(-transaction.actualAmount);
             }
 
+            //the buyer gets the expected amount
             User toUser = Network.getInstance().networkUsers.get(transaction.toPublicKey);
-            toUser.IncreaseWallet(transaction.amount);
+            toUser.IncreaseWallet(transaction.expectedAmount);
+
+            //miner gets the fee
+            Network.getInstance().networkUsers.get(fullNodeblock.luckyMinerPublicKey).IncreaseWallet(transaction.actualAmount-transaction.expectedAmount);
         }
     }
 
-    public ArrayList<Block> GetLongestChain() throws IndexOutOfBoundsException
+    public ArrayList<FullNodeBlock> GetLongestChain() throws IndexOutOfBoundsException
     {
         try
         {
             int longestSoFar = 1;
-            ArrayList<Block> longestChainSoFar = blockChains.get(0);
+            ArrayList<FullNodeBlock> longestChainSoFar = blockChains.get(0);
             for (int i = 0; i < blockChains.size(); i++)
             {
                 if(blockChains.get(i).size() > longestSoFar)
@@ -186,7 +202,6 @@ public class FullNode
             return 0;
         }
     }
-
 
 
 }

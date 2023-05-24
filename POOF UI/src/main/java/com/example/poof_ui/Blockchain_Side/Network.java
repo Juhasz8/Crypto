@@ -71,18 +71,20 @@ public class Network
             User seller = sellingRequests.get(0).user;
             Trader trader = buyingRequests.get(0).trader;
 
-            Transaction match = GetMatch(seller, trader);
+            Transaction transaction = GetMatch(seller, trader);
 
             //byte[] originalMessage = Cryptography.Convert(match);
             //convert the match into an array of bits, and pass these bytes and the publicKey of the buyer to the seller to sign
             //byte[] signedMessage = seller.Sign(originalMessage);
 
-            match.SignTransaction(seller);
+            transaction.SignTransaction(seller);
 
             for(int i = 0; i < miners.size(); i++)
             {
-                miners.get(i).ProcessLedger(match);
+                miners.get(i).ProcessLedger(transaction);
             }
+
+            fullNode.waitingTransSinceLastTrustedBlock.add(transaction);
             //ask for the verification of the trader for the signed transaction
 //            if(trader.VerifySignedMessage(originalMessage, signedMessage, seller.publicKey))
 //            {
@@ -104,9 +106,9 @@ public class Network
     {
         //the seller sells more
         if(sellingRequests.get(0).tradeAmount > buyingRequests.get(0).tradeAmount)
-            return new Transaction(TransactionType.NORMAL, seller.publicKeyString, trader.publicKeyString, buyingRequests.get(0).tradeAmount);
+            return new Transaction(TransactionType.NORMAL, seller.publicKeyString, trader.publicKeyString, buyingRequests.get(0).tradeAmount, sellingRequests.get(0).transactionFeePercent);
         else
-            return new Transaction(TransactionType.NORMAL, seller.publicKeyString, trader.publicKeyString, sellingRequests.get(0).tradeAmount);
+            return new Transaction(TransactionType.NORMAL, seller.publicKeyString, trader.publicKeyString, sellingRequests.get(0).tradeAmount, sellingRequests.get(0).transactionFeePercent);
     }
 
     private void AdjustRequests()
@@ -150,15 +152,16 @@ public class Network
         networkUsers.put(trader.publicKeyString, trader);
     }
 
-    public void NewBlockWasMined(Block newBlock)
+    public void NewBlockWasMined(Block newBlock, String luckyMinerPublicKey)
     {
         //we notify the full nodes about the new block mined
-        fullNode.NotifyNodeThatNewBlockWasMined(newBlock);
+        fullNode.NotifyNodeThatNewBlockWasMined(new FullNodeBlock(newBlock, luckyMinerPublicKey));
 
         //we notify every user in the network about the new Block
         for(int i = 0; i < miners.size(); i++)
         {
-            miners.get(i).ReceiveNewBlockWasMinedInformation(newBlock);
+            if(miners.get(i).publicKeyString != luckyMinerPublicKey)
+                miners.get(i).SomebodyElseMinedABlock(newBlock);
         }
     }
 

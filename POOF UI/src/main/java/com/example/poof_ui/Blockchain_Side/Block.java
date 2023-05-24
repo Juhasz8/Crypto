@@ -8,7 +8,7 @@ public class Block {
     public String previousHash;
     public long timeStamp;
 
-    private byte[] blockData;
+    //private byte[] blockData;
     public MerkleTree dataTree;
 
     //just for debugging and printing purposes
@@ -16,7 +16,7 @@ public class Block {
 
     public Block(byte[] blockData, String previousHash)
     {
-        this.blockData = blockData;
+        //this.blockData = blockData;
         this.previousHash = previousHash;
         this.timeStamp = new Date().getTime();
 
@@ -52,7 +52,11 @@ public class Block {
         dataTree.AddTransaction(transaction);
     }
 
-
+    public String GetMerkleRoot()
+    {
+        return dataTree.merkleRoot;
+    }
+    /*
     public byte[] GetData()
     {
         return blockData;
@@ -62,5 +66,5 @@ public class Block {
     {
         return blockData == null;
     }
-
+    */
 }

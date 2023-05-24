@@ -41,7 +41,19 @@ public class Miner extends User
         myblock = new Block(null, Network.getInstance().fullNode.GetLastTrustedBlockHash());
         previousTrustedHash = Network.getInstance().fullNode.GetLastTrustedBlockHash();
         //myblock.AddData(Cryptography.ConvertFromTransactionToByte(new TransactionMatch(TransactionType.REWARD, null, publicKeyString, Network.getInstance().GetMinerReward())));
-        myblock.AddData(new Transaction(TransactionType.REWARD, null, publicKeyString, Network.getInstance().GetMinerReward()));
+        //myblock.AddData(new Transaction(TransactionType.REWARD, null, publicKeyString, Network.getInstance().GetMinerReward()));
+
+        ArrayList<Transaction> waitingFullNodeTrans = Network.getInstance().fullNode.waitingTransSinceLastTrustedBlock;
+        //adding the waiting transactions from the full node to the ledger
+        for(int i = waitingFullNodeTrans.size()-1; i >= 0; i--)
+        {
+            if(numberOfTransactions < Network.getInstance().GetMaxLedgerCount())
+            {
+                ProcessLedger(waitingFullNodeTrans.get(i));
+            }
+            else
+                break;
+        }
 
         PoofController.getInstance().AddMinerGUI();
     }
@@ -125,8 +137,15 @@ public class Miner extends User
 
         if(hash.substring(0, Network.getInstance().GetDifficulty()).equals(target))
         {
+            System.out.println("I mined a block successfully!! " + name);
+            myblock.BlockMined(hash);
+
             //New Block mined successfully
-            IMinedABlockSuccessfully(hash);
+            ITrustANewBlock(hash);
+
+            //we have to notify everyone on the network that we are the lottery winners
+            Network.getInstance().NewBlockWasMined(myblock, publicKeyString);
+
         }
         else
         {
@@ -134,14 +153,10 @@ public class Miner extends User
         }
     }
 
-    public void ReceiveNewBlockWasMinedInformation(Block newblock)
-    {
-
-    }
 
     private String CalculateHash()
     {
-        return Cryptography.sha256(Long.toString(myblock.timeStamp) + Integer.toString(nonce) + myblock.GetData());
+        return Cryptography.sha256(Long.toString(myblock.timeStamp) + Integer.toString(nonce) + myblock.GetMerkleRoot());
     }
 
     //private void ValidateBlock
@@ -173,21 +188,16 @@ public class Miner extends User
         return (long)-0.018*x + (long)1.9; //sleeping time should be 1 sec if power is 10 and 0.1 sec if power 100
     }
 
-    private void IMinedABlockSuccessfully(String correctHash)
+    private void ITrustANewBlock(String correctHash)
     {
-        System.out.println("I mined a block successfully!! " + name);
-        myblock.BlockMined(correctHash);
-        previousTrustedHash = correctHash;
 
+        previousTrustedHash = correctHash;
         //resetting the nonce
         nonce = 0;
 
-        //we have to notify everyone on the network that we are the lottery winners
-        Network.getInstance().NewBlockWasMined(myblock);
-
         //flushing the data
         myblock = new Block(null, previousTrustedHash);
-        myblock.AddData(new Transaction(TransactionType.REWARD, null, publicKeyString, Network.getInstance().GetMinerReward()));
+        //myblock.AddData(new Transaction(TransactionType.REWARD, null, publicKeyString, Network.getInstance().GetMinerReward()));
 
         //adding the waiting transactions to the ledger
         for(int i = waitingTrans.size()-1; i >= 0; i--)
@@ -216,14 +226,37 @@ public class Miner extends User
         //if a miner who is unlucky and didn't mine the block, gets notified of a block that was mined
         //he will check if that block is the same that he has. If they match up, he will discard his current block
         //because from his point of view, in his belief, that block which was just mined is going to become a trusted block later.
-        //otherwise, he will keep working on his current block, because the block which was just mined was either a sneaky block, or this miner is working on a sneaky block himself
+        //otherwise, he will keep working on his current block, because the block which was just mined was either a sneaky block, or this miner is working on a sneaky block himself#
+
+
+
+        //the miner getting reward maybe shouldnt be on the ledger because it fucks up the merkle root check in the case above?
+        //it wont be on the ledger!! the full node will handle giving out the gift rewards once a block becomes trusted!!!!!!!!!!
+
     }
 
+    //checks whether u should stop mining cause the chain you are working on was called "untrusted" by the fullnode
+    //this is for the cheathers, it checks whether they still have any chance left or not
+    public void CheckMyTrustedBlockGettingDiscarded()
+    {
+
+    }
 
     public void SomebodyElseMinedABlock(Block newBlock)
     {
         //the previous hash will be updated according to the relation between my current block I am working on and this new block that was mined by someone else
         //we do this check simply by comparing the merkle root of the new block that was mined and the block I am trying to mine
+
+        //check if the new block mined by someone else is trusted by you or not
+        if(newBlock.GetMerkleRoot() != myblock.GetMerkleRoot())
+            return;
+
+        //this miner trusts the block that was mined by someone else because it contains the same transactions
+        ITrustANewBlock(newBlock.hash);
+
+        //either the miner of the new block is trying to cheat or this miner is trying to cheat
+        //nothing happens
+
     }
 
     public void ProcessLedger(Transaction signedTransaction)

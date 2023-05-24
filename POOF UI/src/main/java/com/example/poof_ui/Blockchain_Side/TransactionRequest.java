@@ -2,9 +2,9 @@ package com.example.poof_ui.Blockchain_Side;
 
 public class TransactionRequest
 {
-    public float tradeAmount;
+    public double tradeAmount;
 
-    public TransactionRequest(float tradeAmount)
+    public TransactionRequest(double tradeAmount)
     {
         this.tradeAmount = tradeAmount;
     }
@@ -26,24 +26,24 @@ class BuyingRequest extends TransactionRequest
 class SellingRequest extends TransactionRequest implements Comparable<SellingRequest>
 {
     public User user;
-    public float transactionFee;
+    public double transactionFeePercent;
 
-    public SellingRequest(User user, float tradeAmount, float transactionFee)
+    public SellingRequest(User user, double tradeAmount, double transactionFeePercent)
     {
         super(tradeAmount);
         this.user = user;
-        this.transactionFee = transactionFee;
+        this.transactionFeePercent = transactionFeePercent;
     }
 
     @Override
     public int compareTo(SellingRequest request)
     {
 
-        if (request.transactionFee > this.transactionFee)
+        if (request.transactionFeePercent > this.transactionFeePercent)
         {
             return 1;
         }
-        else if (request.transactionFee < this.transactionFee)
+        else if (request.transactionFeePercent < this.transactionFeePercent)
         {
             return -1;
         }
