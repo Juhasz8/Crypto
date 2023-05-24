@@ -85,7 +85,6 @@ public class SimulationManager implements Runnable
         //join the traders and miners to the network
 
 
-
     }
 
     private void DetermineMarketPrice()

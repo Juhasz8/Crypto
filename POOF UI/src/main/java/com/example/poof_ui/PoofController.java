@@ -184,14 +184,14 @@ public class PoofController implements Initializable {
     {
         // Add miners
         MinerGUI minerGUI = new MinerGUI();
-        minersTile.getChildren().add(minerGUI);
+        Platform.runLater(() -> minersTile.getChildren().add(minerGUI));
     }
 
     public void AddTraderGUI()
     {
         // Add traders
         TraderGUI traderGUI = new TraderGUI();
-        tradersTile.getChildren().add(traderGUI);
+        Platform.runLater(() -> tradersTile.getChildren().add(traderGUI));
     }
 
     public void updateMarketPriceLabel(String Price){
