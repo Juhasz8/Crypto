@@ -106,9 +106,9 @@ public class Network
     {
         //the seller sells more
         if(sellingRequests.get(0).tradeAmount > buyingRequests.get(0).tradeAmount)
-            return new Transaction(TransactionType.NORMAL, seller.publicKeyString, trader.publicKeyString, buyingRequests.get(0).tradeAmount, sellingRequests.get(0).transactionFeePercent);
+            return new Transaction(TransactionType.NORMAL, seller.publicKeyString, trader.publicKeyString, buyingRequests.get(0).tradeAmount, sellingRequests.get(0).transactionFee);
         else
-            return new Transaction(TransactionType.NORMAL, seller.publicKeyString, trader.publicKeyString, sellingRequests.get(0).tradeAmount, sellingRequests.get(0).transactionFeePercent);
+            return new Transaction(TransactionType.NORMAL, seller.publicKeyString, trader.publicKeyString, sellingRequests.get(0).tradeAmount, sellingRequests.get(0).transactionFee);
     }
 
     private void AdjustRequests()

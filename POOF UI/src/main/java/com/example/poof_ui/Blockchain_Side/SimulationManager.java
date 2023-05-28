@@ -29,8 +29,15 @@ public class SimulationManager implements Runnable
     private SimulationManager()
     {
         //make the very first miner join the network
-        Miner miner1 = new Miner(20, 21, MinerType.THAT_ONE_GUY);
-        miner1.start();
+        //Miner miner1 = new Miner(10, 11, MinerType.THAT_ONE_GUY, GetMinerSleepingTime(MinerType.THAT_ONE_GUY));
+        //miner1.start();
+
+        Miner miner2 = new Miner(10, 11, MinerType.HUGE_CORP, GetMinerSleepingTime(MinerType.HUGE_CORP));
+        miner2.start();
+
+
+        Miner miner3 = new Miner(10, 11, MinerType.HUGE_CORP, GetMinerSleepingTime(MinerType.HUGE_CORP));
+        miner3.start();
     }
 
     public void run()
@@ -44,10 +51,10 @@ public class SimulationManager implements Runnable
                     while (isSuspended)
                         wait();
 
-                    JoiningPeople();
                     DetermineMarketPrice();
+                    JoiningPeople();
 
-                    Thread.sleep(5000);
+                    Thread.sleep(2000);
 
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
@@ -74,7 +81,7 @@ public class SimulationManager implements Runnable
         //1 + 1/(n+1)
         if(Network.getInstance().GetTraderAmount() == 0)
         {
-            Trader myGuy = new Trader();
+            Trader myGuy = new Trader(TraderType.RISK_APPETITE);
             myGuy.start();
         }
 
@@ -111,7 +118,7 @@ public class SimulationManager implements Runnable
         if(marketPrice < 0)
             marketPrice = 0;
 
-        System.out.println("new market price: " + marketPrice);
+        //System.out.println("new market price: " + marketPrice);
 
         // Update Market Price Label
         PoofController.getInstance().updateMarketPriceLabel(String.valueOf(marketPrice));
@@ -143,5 +150,22 @@ public class SimulationManager implements Runnable
         isSuspended = false;
     }
 
+    private long GetMinerSleepingTime(MinerType minerType)
+    {
+        if(minerType == MinerType.THAT_ONE_GUY)
+            return random.nextLong(100)+50;
+        else if(minerType == MinerType.THESE_GUYS)
+            return random.nextLong(100)+50;
+        else if(minerType == MinerType.GROUP)
+            return random.nextLong(100)+50;
+        else if(minerType == MinerType.SMALL_CORP)
+            return random.nextLong(100)+50;
+        else if(minerType == MinerType.HUGE_CORP)
+            //return random.nextLong(10)+10;
+            return 20;
+
+        System.out.println("Something went wrong! Non-existing MinerType!");
+        return random.nextLong(100)+50;
+    }
 
 }

@@ -39,8 +39,6 @@ public class Cryptography {
         }
     }
 
-    //this is how a ledger looks like:
-    //TOMINERKEY-REWARDAMOUNT , FROMKEY-TOKEY-AMOUNT , FROMKEY-TOKEY-AMOUNT
     //THIS METHOD IS DEPRECATED PROBABLY
     public static byte[] ConvertFromTransactionToByte(Transaction match)
     {
@@ -52,7 +50,7 @@ public class Cryptography {
             if(match.type == TransactionType.NORMAL)
                 dos.write(match.fromPublicKey.getBytes());
             dos.write(match.toPublicKey.getBytes());
-            dos.writeDouble(match.expectedAmount);
+            dos.writeDouble(match.amount);
 
             dos.flush();
         }

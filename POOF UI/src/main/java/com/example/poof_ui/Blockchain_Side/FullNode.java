@@ -33,7 +33,7 @@ public class FullNode
             return lastTrustedBlock.block.hash;
     }
 
-    public void NotifyNodeThatNewBlockWasMined(FullNodeBlock newFullNodeBlock)
+    public synchronized void NotifyNodeThatNewBlockWasMined(FullNodeBlock newFullNodeBlock)
     {
         //in the case of the very first blockchain that was mined and added, we just add it and trust it immediately (cause its data is empty anyways)
         if(blockChains.size() == 0)
@@ -51,8 +51,16 @@ public class FullNode
         ArrayList<FullNodeBlock> longestChain = GetLongestChain();
         for(int i = lastTrustedBlockIndex; i < longestChain.size(); i++)
         {
+            //if the new blocks previoushash matches up with any of the previous hashes of the longest chain
             if(newFullNodeBlock.block.previousHash == longestChain.get(i).block.previousHash)
             {
+                //if the new block has the same data as the one that was just mined
+                // -> the second guy didn't get notified yet so he mined the same block and tried to add it
+                if(newFullNodeBlock.block.GetMerkleRoot() == longestChain.get(i).block.GetMerkleRoot())
+                {
+                    System.out.println("The poor second guy was just after the first one, so unlucky! Better luck next time!");
+                    return;
+                }
                 //Conflict at block number I!!
 
                 //branch apart from the current longestChain
@@ -64,6 +72,7 @@ public class FullNode
                 branch.add(newFullNodeBlock);
                 blockChains.add(branch);
 
+                System.out.println("BLOCKCHAIN CONFLICT HAPPENED! Somebody is trying to be sneaky!");
                 conflictHappened = true;
             }
         }
@@ -81,7 +90,14 @@ public class FullNode
                     break;
                 }
                 else if(i == blockChains.size()-1)
+                {
+                    System.out.println("-------------------------------------");
                     System.out.println("SOMETHING WRONG WITH ADDING NEW BLOCK! ");
+                    System.out.println("last hash: " + blockChains.get(i).get(blockChains.get(i).size()-1).block.hash);
+                    System.out.println("new block's previous hash: " + newFullNodeBlock.block.previousHash);
+                    System.out.println("-------------------------------------");
+                    return;
+                }
             }
 
             longestChain = GetLongestChain();
@@ -156,15 +172,15 @@ public class FullNode
             {
                 User fromUser = Network.getInstance().networkUsers.get(transaction.fromPublicKey);
                 //from the user the actual amount is getting deducted
-                fromUser.IncreaseWallet(-transaction.actualAmount);
+                fromUser.IncreaseWallet(-transaction.amount);
             }
 
             //the buyer gets the expected amount
             User toUser = Network.getInstance().networkUsers.get(transaction.toPublicKey);
-            toUser.IncreaseWallet(transaction.expectedAmount);
+            toUser.IncreaseWallet(transaction.amount);
 
             //miner gets the fee
-            Network.getInstance().networkUsers.get(fullNodeblock.luckyMinerPublicKey).IncreaseWallet(transaction.actualAmount-transaction.expectedAmount);
+            Network.getInstance().networkUsers.get(fullNodeblock.luckyMinerPublicKey).IncreaseWallet(transaction.fee);
         }
     }
 
@@ -202,6 +218,5 @@ public class FullNode
             return 0;
         }
     }
-
 
 }

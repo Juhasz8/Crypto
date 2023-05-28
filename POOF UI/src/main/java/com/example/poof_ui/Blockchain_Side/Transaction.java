@@ -6,8 +6,8 @@ public class Transaction
     //public User toUser;
     public String fromPublicKey;
     public String toPublicKey;
-    public double expectedAmount;
-    public double actualAmount;
+    public double amount;
+    public double fee;
 
     //the byte message of this match
     public byte[] originalMessage;
@@ -16,15 +16,16 @@ public class Transaction
 
     public TransactionType type;
 
-    public Transaction(TransactionType type, String fromPublicKey, String toPublicKey, double expectedAmount, double tipPercent)
+    public Transaction(TransactionType type, String fromPublicKey, String toPublicKey, double amount, double fee)
     {
         //this.fromUser = fromUser;
         //this.toUser = toUser;
         this.type = type;
         this.fromPublicKey = fromPublicKey;
         this.toPublicKey = toPublicKey;
-        this.expectedAmount = expectedAmount;
-        this.actualAmount = expectedAmount * Double.parseDouble("1."+Double.toString(tipPercent));
+        this.amount = amount;
+        //this.fee = amount * Double.parseDouble("1."+Double.toString(fee));
+        this.fee = fee;
     }
 
     public void SignTransaction(User seller)

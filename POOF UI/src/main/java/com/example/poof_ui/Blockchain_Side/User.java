@@ -1,8 +1,6 @@
 package com.example.poof_ui.Blockchain_Side;
 
-import java.io.*;
 import java.security.*;
-import java.util.ArrayList;
 import java.util.Base64;
 
 public class User extends Thread
@@ -17,7 +15,8 @@ public class User extends Thread
     private PrivateKey privateKey;
 
     //the amount of Puff you own
-    private double wallet = 0;
+    private double poofWallet = 0;
+    private double euroWallet = 0;
 
     protected boolean isSuspended = false;
 
@@ -64,17 +63,17 @@ public class User extends Thread
             System.out.println(name + ": My wallet got increased (+" + amount +")");
         else
             System.out.println(name + ": My wallet got decreased (" + amount +")");
-        wallet += amount;
+        poofWallet += amount;
     }
 
     public double GetWallet()
     {
-        return wallet;
+        return poofWallet;
     }
 
-    public void RequestToSell(float amount, float fee)
+    public void RequestToSell(double amount, double fee)
     {
-        if(wallet < amount)
+        if(poofWallet < amount)
             return;
 
         //TransactionRequest request = new TransactionRequest(this, publicKeyString, TransactionType.SELL, amount, fee);
@@ -117,6 +116,17 @@ public class User extends Thread
     public void ResumeThread()
     {
         isSuspended = false;
+    }
+
+    //passing the variables as references ! //impossible in java :)))))))) -> created new class called Exchange
+    protected void CalculateNormalInfluences(Exchange exchange)
+    {
+
+        //change the difference and the percentage values slightly, based on events, buying and selling trends, and people leaving or joining
+
+
+
+
     }
 
 }

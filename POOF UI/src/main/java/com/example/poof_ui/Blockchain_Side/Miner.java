@@ -1,5 +1,6 @@
 package com.example.poof_ui.Blockchain_Side;
 
+import com.example.poof_ui.MinerGUI;
 import com.example.poof_ui.PoofController;
 
 import java.util.*;
@@ -25,13 +26,24 @@ public class Miner extends User
 
     public MinerType type;
 
+    private MinerGUI minerGUI;
+
+    private long sleepTime;
+
+    //just for debugging until we have actual names for miners
+    private int indexInUsersList;
+
     //this constructor should probably only take the actual mining power and the type of the miner. The power is calculated in the simulationmanager
-    public Miner(int minPower, int maxPower, MinerType type)
+    public Miner(int minPower, int maxPower, MinerType type, long sleepTime)
     {
         super();
         rand = new Random();
         this.type = type;
         miningPower = minPower + rand.nextInt(maxPower-minPower); // -> generate a random number between minPower and maxPower
+        miningPower = 10;
+
+        this.sleepTime = sleepTime;
+        indexInUsersList = Network.getInstance().networkUsers.size();
         //Update();
         Network.getInstance().JoinMinerToTheNetwork(this);
 
@@ -55,18 +67,22 @@ public class Miner extends User
                 break;
         }
 
-        PoofController.getInstance().AddMinerGUI();
+        minerGUI = new MinerGUI();
+        PoofController.getInstance().AddMinerGUI(minerGUI);
     }
+
 
     public static Miner getMiner() {
         // Create separate categories of miners
+
         List<Miner> minerCategories = Arrays.asList(
-        new Miner(100,120, MinerType.HUGE_CORP),
-        new Miner(50,70, MinerType.SMALL_CORP),
-        new Miner(30,50, MinerType.GROUP),
-        new Miner(2,30, MinerType.THESE_GUYS),
-        new Miner(1,2, MinerType.THAT_ONE_GUY)
+        new Miner(100,120, MinerType.HUGE_CORP, 100),
+        new Miner(50,70, MinerType.SMALL_CORP, 100),
+        new Miner(30,50, MinerType.GROUP, 100),
+        new Miner(2,30, MinerType.THESE_GUYS, 100),
+        new Miner(1,2, MinerType.THAT_ONE_GUY, 100)
         );
+
 
         // Create the chances of getting picked
         Map<String, List<Integer>> dictionary = Map.of(
@@ -117,8 +133,11 @@ public class Miner extends User
                         wait();
 
                     TryToMine();
+                    //System.out.println("check");
+                    //Thread.sleep((1/miningPower) * 1000);
+                    //Thread.currentThread().wait((long)0.25);
 
-                    Thread.sleep(GetSleepingTime(miningPower) * 10);
+                    Thread.sleep(sleepTime);
 
                 } catch (Exception e) {
                     System.out.println(e);
@@ -134,17 +153,21 @@ public class Miner extends User
         String hash = CalculateHash();
 
         //System.out.println("Tried to mine, result: " + hash);
+        //minerGUI.SetHashText(hash);
+        PoofController.getInstance().ChangeMinerGUIhash(minerGUI, hash);
 
         if(hash.substring(0, Network.getInstance().GetDifficulty()).equals(target))
         {
-            System.out.println("I mined a block successfully!! " + name);
+            //New Block mined successfully!!
+            System.out.println("--------------------");
+            System.out.println("I mined a block successfully!! " + name + "_" + indexInUsersList);
             myblock.BlockMined(hash);
-
-            //New Block mined successfully
-            ITrustANewBlock(hash);
 
             //we have to notify everyone on the network that we are the lottery winners
             Network.getInstance().NewBlockWasMined(myblock, publicKeyString);
+
+            ITrustANewBlock(hash);
+
 
         }
         else
@@ -185,7 +208,8 @@ public class Miner extends User
 
     private long GetSleepingTime(int x)
     {
-        return (long)-0.018*x + (long)1.9; //sleeping time should be 1 sec if power is 10 and 0.1 sec if power 100
+        //return (long)-0.018*x + (long)1.9; //sleeping time should be 1 sec if power is 10 and 0.1 sec if power 100
+        return 1/x;
     }
 
     private void ITrustANewBlock(String correctHash)
@@ -246,16 +270,22 @@ public class Miner extends User
     {
         //the previous hash will be updated according to the relation between my current block I am working on and this new block that was mined by someone else
         //we do this check simply by comparing the merkle root of the new block that was mined and the block I am trying to mine
+        System.out.println("I am Mr_" + indexInUsersList + " somebody else mined a new block! ");
 
         //check if the new block mined by someone else is trusted by you or not
         if(newBlock.GetMerkleRoot() != myblock.GetMerkleRoot())
+        {
+            System.out.println("I am Mr_" + indexInUsersList + " I DON'T trust the new block! ");
+            //either the miner of the new block is trying to cheat or this miner is trying to cheat
+            //so you keep mining your block
             return;
+        }
+        System.out.println("I am Mr_" + indexInUsersList + " I trust the new block! ");
 
         //this miner trusts the block that was mined by someone else because it contains the same transactions
         ITrustANewBlock(newBlock.hash);
 
-        //either the miner of the new block is trying to cheat or this miner is trying to cheat
-        //nothing happens
+
 
     }
 

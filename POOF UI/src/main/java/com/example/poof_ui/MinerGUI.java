@@ -2,6 +2,7 @@ package com.example.poof_ui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -22,12 +23,22 @@ public class MinerGUI extends AnchorPane {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     @FXML
     private ImageView minerPp;
 
-    public void setProfilePicture(Image image) {
+    @FXML
+    private Label hashLabel;
+
+    public void setProfilePicture(Image image)
+    {
         minerPp.setImage(image);
+    }
+
+    public void SetHashText(String hash)
+    {
+        hashLabel.setText(hash);
     }
 }

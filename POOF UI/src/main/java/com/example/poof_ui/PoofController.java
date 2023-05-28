@@ -103,7 +103,7 @@ public class PoofController implements Initializable {
         series1.getData().add(new XYChart.Data<>(String.valueOf(0), 0));
 
         // Initialize chart animation
-        timeline = new Timeline(new KeyFrame(Duration.seconds(2.5), event -> {
+        timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
 
             // Timeline Counter
             // Increment the years, months, and weeks passed
@@ -180,11 +180,15 @@ public class PoofController implements Initializable {
         isPlaying = !isPlaying;
     }
 
-    public void AddMinerGUI()
+    public void AddMinerGUI(MinerGUI minerGUI)
     {
         // Add miners
-        MinerGUI minerGUI = new MinerGUI();
         Platform.runLater(() -> minersTile.getChildren().add(minerGUI));
+    }
+
+    public void ChangeMinerGUIhash(MinerGUI minerGUI, String hash)
+    {
+        Platform.runLater(() -> minerGUI.SetHashText(hash));
     }
 
     public void AddTraderGUI()
