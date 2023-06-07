@@ -20,6 +20,7 @@ public class FullNode
 
     public ArrayList<Transaction> waitingTransSinceLastTrustedBlock = new ArrayList<>();
 
+
     public FullNode()
     {
 
@@ -35,6 +36,8 @@ public class FullNode
 
     public synchronized void NotifyNodeThatNewBlockWasMined(FullNodeBlock newFullNodeBlock)
     {
+        System.out.println("I JOINED THE SYNCRONISED METHOD: " + newFullNodeBlock.luckyMinerPublicKey);
+        System.out.println("with merkle root: " + newFullNodeBlock.block.dataTree.merkleRoot);
         //in the case of the very first blockchain that was mined and added, we just add it and trust it immediately (cause its data is empty anyways)
         if(blockChains.size() == 0)
         {
@@ -42,19 +45,22 @@ public class FullNode
             blockChains.add(new ArrayList<>(){});
             blockChains.get(0).add(newFullNodeBlock);
             TrustABlock(newFullNodeBlock);
+            Network.getInstance().NotifyMinersAboutNewBlockMined(newFullNodeBlock);
+
             DebugPrintingOfBlockchains();
             return;
         }
+
 
         boolean conflictHappened = false;
         //check whether there is a conflict
         ArrayList<FullNodeBlock> longestChain = GetLongestChain();
         for(int i = lastTrustedBlockIndex; i < longestChain.size(); i++)
         {
-            //if the new blocks previoushash matches up with any of the previous hashes of the longest chain
+            //if the new blocks previous hash matches up with any of the previous hashes of the longest chain
             if(newFullNodeBlock.block.previousHash == longestChain.get(i).block.previousHash)
             {
-                //if the new block has the same data as the one that was just mined
+                // if the new block has the same data as the one that was just mined
                 // -> the second guy didn't get notified yet so he mined the same block and tried to add it
                 if(newFullNodeBlock.block.GetMerkleRoot() == longestChain.get(i).block.GetMerkleRoot())
                 {
@@ -75,7 +81,11 @@ public class FullNode
                 System.out.println("BLOCKCHAIN CONFLICT HAPPENED! Somebody is trying to be sneaky!");
                 conflictHappened = true;
             }
+            else if(i == longestChain.size()-1)
+                System.out.println("NO CONFLICT OR UNLUCKY GUY");
         }
+
+        Network.getInstance().NotifyMinersAboutNewBlockMined(newFullNodeBlock);
 
         //if there were no conflicts, we just trust an old block in the past and add the new block to the chain
         if(!conflictHappened)
@@ -83,7 +93,7 @@ public class FullNode
             //and add the new block to the currect blockchain
             for (int i = 0; i < blockChains.size(); i++)
             {
-                if(blockChains.get(i).get(blockChains.get(i).size()-1).block.hash == newFullNodeBlock.block.previousHash)
+                if(blockChains.get(i).get(blockChains.get(i).size()-1).block.hash.equals(newFullNodeBlock.block.previousHash))
                 {
                     //System.out.println("added a new block on an existing chain! ");
                     blockChains.get(i).add(newFullNodeBlock);

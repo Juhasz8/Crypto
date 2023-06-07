@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class MerkleTree
 {
-    public String merkleRoot;
+    public String merkleRoot = "";
 
     public ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 

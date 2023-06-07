@@ -6,11 +6,13 @@ import com.example.poof_ui.PoofController;
 import java.util.*;
 import java.security.Signature;
 
+
+
 enum MinerType { THAT_ONE_GUY, THESE_GUYS, GROUP, SMALL_CORP, HUGE_CORP }
 
 public class Miner extends User
 {
-    private int miningPower;
+    private float miningPower;
     private Random rand;
     int numberOfTransactions = 0;
     private ArrayList<Transaction> waitingTrans = new ArrayList<>();
@@ -34,13 +36,15 @@ public class Miner extends User
     private int indexInUsersList;
 
     //this constructor should probably only take the actual mining power and the type of the miner. The power is calculated in the simulationmanager
-    public Miner(int minPower, int maxPower, MinerType type, long sleepTime)
+    public Miner(MinerType type, long sleepTime)
     {
         super();
         rand = new Random();
         this.type = type;
-        miningPower = minPower + rand.nextInt(maxPower-minPower); // -> generate a random number between minPower and maxPower
-        miningPower = 10;
+        //miningPower = minPower + rand.nextInt(maxPower-minPower); // -> generate a random number between minPower and maxPower
+        //miningPower = 10;
+        this.miningPower = (1/(float)sleepTime * 10000);
+        System.out.println("POWER: " + miningPower);
 
         this.sleepTime = sleepTime;
         indexInUsersList = Network.getInstance().networkUsers.size();
@@ -68,19 +72,20 @@ public class Miner extends User
         }
 
         minerGUI = new MinerGUI();
-        PoofController.getInstance().AddMinerGUI(minerGUI);
+        PoofController.getInstance().AddMinerGUI(minerGUI, decFormatter.format(miningPower));
     }
 
 
     public static Miner getMiner() {
         // Create separate categories of miners
 
+        /*
         List<Miner> minerCategories = Arrays.asList(
-        new Miner(100,120, MinerType.HUGE_CORP, 100),
-        new Miner(50,70, MinerType.SMALL_CORP, 100),
-        new Miner(30,50, MinerType.GROUP, 100),
-        new Miner(2,30, MinerType.THESE_GUYS, 100),
-        new Miner(1,2, MinerType.THAT_ONE_GUY, 100)
+        new Miner(100,MinerType.HUGE_CORP, 100),
+        new Miner(50, MinerType.SMALL_CORP, 100),
+        new Miner(30, MinerType.GROUP, 100),
+        new Miner(2, MinerType.THESE_GUYS, 100),
+        new Miner(1,MinerType.THAT_ONE_GUY, 100)
         );
 
 
@@ -118,7 +123,8 @@ public class Miner extends User
             return minerCategories.get(4);
         }
         return null;
-
+        */
+        return null;
     }
 
     public void run()
@@ -179,7 +185,10 @@ public class Miner extends User
 
     private String CalculateHash()
     {
-        return Cryptography.sha256(Long.toString(myblock.timeStamp) + Integer.toString(nonce) + myblock.GetMerkleRoot());
+        //in real life the propagation of the information that a new block was mined is one of the things that make sure
+        //that the miners are not trying to guess the same, but since in our simulation the propagation is 0,
+        //to make sure they are guessing different numbers they also include their unique public key to make sure they are all getting different hashes
+        return Cryptography.sha256(Long.toString(myblock.timeStamp) + Integer.toString(nonce) + myblock.GetMerkleRoot()) + publicKeyString;
     }
 
     //private void ValidateBlock
@@ -310,4 +319,75 @@ public class Miner extends User
         }
     }
 
+    private void DecideToSell()
+    {
+        //if it's not the first transaction, there is a 10% chance that the miner wont sell anything
+        if(random.nextInt(10) == 0)
+            return;
+
+        Exchange exchange = new Exchange();
+
+        if(type == MinerType.THAT_ONE_GUY)
+        {
+
+        }
+        else if (type == MinerType.THESE_GUYS)
+        {
+
+        }
+        else if (type == MinerType.GROUP)
+        {
+
+        }
+        else if (type == MinerType.SMALL_CORP)
+        {
+
+        }
+        else if (type == MinerType.HUGE_CORP)
+        {
+
+        }
+
+
+        //every type's decision is influenced by the current event and the trend
+        CalculateNormalSellingInfluences(exchange);
+
+        //there is a 20% chance for the trader to make a bigger decision
+        if(random.nextInt(5) == 0)
+        {
+            exchange.difference *= 1.5;
+        }
+
+        //everyone has a 5% chance of deciding based on complete randomness, like a psychopath
+        if(random.nextInt(20) == 0)
+        {
+            //completely random behaviour
+
+            //random difference between -100 and 100
+            exchange.difference = random.nextInt(200)-100;
+            //will deal with 5-95% of his current currency
+            exchange.percent = random.nextDouble(.9)+0.05;
+        }
+
+
+        //the influence of everything has to be big enough for the miner to sell
+        if(exchange.difference <= -25)
+            MakeTheSellRequest(exchange);
+    }
+
+    //this is called by the miners since they can only sell
+    protected void CalculateNormalSellingInfluences(Exchange exchange)
+    {
+        //if there are only a few miners, they are more likely to sell then at a later point when there will be more miners
+
+    }
+
+    private void MakeTheSellRequest(Exchange exchange)
+    {
+        //double feePercent = random.nextDouble(5)+2;
+        double feePercent = random.nextDouble(0.05)+0.02; //feePercent is a random between 2 and 7
+
+        //calculate the actual amount based on difference and exchangePercent
+        RequestToSell(exchange.difference * (1-feePercent), exchange.difference * feePercent);
+    }
 }

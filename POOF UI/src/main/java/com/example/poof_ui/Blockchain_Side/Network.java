@@ -130,38 +130,55 @@ public class Network
 
     public void ProcessBuyingRequest(BuyingRequest request)
     {
+        //store the request here
         buyingRequests.add(request);
+        //increment the cycle request amount
+        SimulationManager.getInstance().requestLinkHead.cycleBuyingRequestAmount++;
+
         TryToMatch();
     }
 
     public void ProcessSellingRequest(SellingRequest request)
     {
+        //store the request in the network
         sellingRequests.add(request);
+        //increment the cycle request amount
+        SimulationManager.getInstance().requestLinkHead.cycleSellingRequestAmount++;
+
         TryToMatch();
     }
 
     public void JoinMinerToTheNetwork(Miner miner)
     {
+        //adding the miner to the list of miners in the network
         miners.add(miner);
+        //adding the user itself in the hashmap, with the key of the users publicKey
         networkUsers.put(miner.publicKeyString, miner);
     }
 
     public void JoinTraderToTheNetwork(Trader trader)
     {
+        //adding the trader to the list of traders
         traders.add(trader);
+        //adding the user itself in the hashmap, with the key of the users publicKey
         networkUsers.put(trader.publicKeyString, trader);
     }
 
     public void NewBlockWasMined(Block newBlock, String luckyMinerPublicKey)
     {
+        System.out.println("miner: + " + luckyMinerPublicKey);
+        System.out.println("is trying to enter method with root: + " + newBlock.dataTree.merkleRoot);
         //we notify the full nodes about the new block mined
         fullNode.NotifyNodeThatNewBlockWasMined(new FullNodeBlock(newBlock, luckyMinerPublicKey));
+    }
 
-        //we notify every user in the network about the new Block
+    public void NotifyMinersAboutNewBlockMined(FullNodeBlock fullNodeBlock)
+    {
+        //we notify every miner in the network about the new Block
         for(int i = 0; i < miners.size(); i++)
         {
-            if(miners.get(i).publicKeyString != luckyMinerPublicKey)
-                miners.get(i).SomebodyElseMinedABlock(newBlock);
+            if(miners.get(i).publicKeyString != fullNodeBlock.luckyMinerPublicKey)
+                miners.get(i).SomebodyElseMinedABlock(fullNodeBlock.block);
         }
     }
 

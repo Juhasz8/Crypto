@@ -19,6 +19,75 @@ public class SimulationManager implements Runnable
 
     private boolean isSuspended = false;
 
+
+    //These fields are for storing the last 5 cycle's buying and selling requests
+    // (which happened in the last 5*2 = 10 seconds)
+    //if we would need the correct order in which the amounts happened we will need a linked list
+    private int currentListLength = 1;
+    private int maxListLength = 5;
+
+    //the requests that happened in the last update cycle
+    public RequestLink requestLinkHead = new RequestLink();
+
+    //the requests that happened in the 5th last update cycle
+    private RequestLink requestLinkTail;
+
+    //getters for the total values
+    public int GetSellingRequestAmount()
+    {
+        int sum = 0;
+        RequestLink current = requestLinkTail;
+        while(current.next != null)
+        {
+            sum += current.cycleSellingRequestAmount;
+            current = current.next;
+        }
+        return sum;
+    }
+    public int GetBuyingRequestAmount()
+    {
+        int sum = 0;
+        RequestLink current = requestLinkTail;
+        while(current.next != null)
+        {
+            sum += current.cycleBuyingRequestAmount;
+            current = current.next;
+        }
+        return sum;
+    }
+
+    //called in the update loop
+    private void UpdateRequestListening()
+    {
+        //the linked list reached its maximum capacity
+        if(currentListLength == maxListLength)
+        {
+            //we remove the last element by setting the tail pointer to the right by one
+            requestLinkTail = requestLinkTail.next;
+
+            //adding new element, and setting the head point there
+            RequestLink newHead = new RequestLink();
+            requestLinkHead.next = newHead;
+            requestLinkHead = newHead;
+        }
+        else
+        {
+            //if we only have the head, the tail will point there too
+            if(currentListLength == 1)
+                requestLinkTail = requestLinkHead;
+
+            //adding new element and setting the head point there
+            RequestLink newHead = new RequestLink();
+            requestLinkHead.next = newHead;
+            requestLinkHead = newHead;
+
+            //we increment the length
+            currentListLength++;
+        }
+    }
+    //----------------
+
+
     public static SimulationManager getInstance() {
         if (instance == null)
             instance = new SimulationManager();
@@ -32,11 +101,11 @@ public class SimulationManager implements Runnable
         //Miner miner1 = new Miner(10, 11, MinerType.THAT_ONE_GUY, GetMinerSleepingTime(MinerType.THAT_ONE_GUY));
         //miner1.start();
 
-        Miner miner2 = new Miner(10, 11, MinerType.HUGE_CORP, GetMinerSleepingTime(MinerType.HUGE_CORP));
+        Miner miner2 = new Miner(MinerType.HUGE_CORP, GetMinerSleepingTime(MinerType.HUGE_CORP));
         miner2.start();
 
 
-        Miner miner3 = new Miner(10, 11, MinerType.HUGE_CORP, GetMinerSleepingTime(MinerType.HUGE_CORP));
+        Miner miner3 = new Miner(MinerType.HUGE_CORP, GetMinerSleepingTime(MinerType.HUGE_CORP));
         miner3.start();
     }
 
@@ -53,6 +122,7 @@ public class SimulationManager implements Runnable
 
                     DetermineMarketPrice();
                     JoiningPeople();
+                    UpdateRequestListening();
 
                     Thread.sleep(2000);
 
@@ -106,6 +176,11 @@ public class SimulationManager implements Runnable
         //based on their amounts, we change the value of market price
 
         //if(Network.getInstance().networkUsers.size() > 1)
+        System.out.println("...................");
+        System.out.println("all selling requests last 5 cycles: " + GetSellingRequestAmount());
+        System.out.println("all buying requests last 5 cycles: " + GetBuyingRequestAmount());
+        System.out.println("...................");
+
 
         if(marketPrice == 0)
         {
@@ -162,7 +237,7 @@ public class SimulationManager implements Runnable
             return random.nextLong(100)+50;
         else if(minerType == MinerType.HUGE_CORP)
             //return random.nextLong(10)+10;
-            return 20;
+            return 30;
 
         System.out.println("Something went wrong! Non-existing MinerType!");
         return random.nextLong(100)+50;

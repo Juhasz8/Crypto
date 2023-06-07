@@ -3,6 +3,10 @@ package com.example.poof_ui.Blockchain_Side;
 import java.security.*;
 import java.util.Base64;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.Random;
+
 public class User extends Thread
 {
 
@@ -19,6 +23,13 @@ public class User extends Thread
     private double euroWallet = 0;
 
     protected boolean isSuspended = false;
+
+
+    public Random random = new Random();
+
+    //for rounding numbers up to 2 decimal
+    protected DecimalFormat decFormatter = new DecimalFormat("0.0");
+
 
     public User()
     {
@@ -116,17 +127,6 @@ public class User extends Thread
     public void ResumeThread()
     {
         isSuspended = false;
-    }
-
-    //passing the variables as references ! //impossible in java :)))))))) -> created new class called Exchange
-    protected void CalculateNormalInfluences(Exchange exchange)
-    {
-
-        //change the difference and the percentage values slightly, based on events, buying and selling trends, and people leaving or joining
-
-
-
-
     }
 
 }

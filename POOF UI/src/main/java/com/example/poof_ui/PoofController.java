@@ -180,10 +180,13 @@ public class PoofController implements Initializable {
         isPlaying = !isPlaying;
     }
 
-    public void AddMinerGUI(MinerGUI minerGUI)
+    public void AddMinerGUI(MinerGUI minerGUI, String powerString)
     {
         // Add miners
         Platform.runLater(() -> minersTile.getChildren().add(minerGUI));
+
+        // Add miners
+        Platform.runLater(() -> minerGUI.SetMiningPowerLabel(powerString));
     }
 
     public void ChangeMinerGUIhash(MinerGUI minerGUI, String hash)

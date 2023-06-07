@@ -10,7 +10,6 @@ public class Trader extends User
 {
 
     public TraderType type;
-    public Random random = new Random();
 
     public Trader(TraderType type)
     {
@@ -43,18 +42,25 @@ public class Trader extends User
 
     }
 
-    public void DecideWhetherToBuyOrSell()
+    private void DecideWhetherToBuyOrSell()
     {
+        //there is a 20% chance that the trader won't sell or buy anything
+        if(random.nextInt(5) == 0)
+            return;
+
         Exchange exchange = new Exchange();
         //difference represents how likely u will sell or buy
         //Double difference = 0.0;
         //percent represent how many percent of you current poof or euro you want to exchange
         //Double exchangePercent;
 
+        //for some people, the likeliness of trading is also taken into account when the amount is calculated
+        //this depends on the type of the trader
+
         if(type == TraderType.RISK_APPETITE) // high risk high reward guy
         {
             //whatever he decides to do, he will deal with a lot of his current money or poof
-            exchange.percent = random.nextDouble(.4)+0.5; //will deal with 35-75% of his current currency
+            exchange.percent = random.nextDouble(.4)+0.35; //will deal with 35-75% of his current currency
 
             //sells fewer times
 
@@ -83,12 +89,16 @@ public class Trader extends User
         else if (type == TraderType.PSYCHOPATH)  //makes decisions completely randomly?
         {
             //completely random behaviour
+
+            //random difference between -100 and 100
+            exchange.difference = random.nextInt(200)-100;
+            //will deal with 5-95% of his current currency
+            exchange.percent = random.nextDouble(.9)+0.05;
         }
 
 
         //every type's decision is influenced by the current event and the trend
         CalculateNormalInfluences(exchange);
-
 
         //there is a 20% chance for the trader to make a bigger decision
         if(random.nextInt(5) == 0)
@@ -105,24 +115,40 @@ public class Trader extends User
         //everyone has a 5% chance of deciding based on complete randomness, like a psychopath
         if(random.nextInt(20) == 0)
         {
+            //completely random behaviour
 
+            //random difference between -100 and 100
+            exchange.difference = random.nextInt(200)-100;
+            //will deal with 5-95% of his current currency
+            exchange.percent = random.nextDouble(.9)+0.05;
         }
 
-        MakeTheTradeRequest(exchange.difference, exchange.percent);
+        //the influence of everything has to be big enough for the trader to make a request
+        if(Math.abs(exchange.difference) >= 25)
+            MakeTheTradeRequest(exchange);
     }
 
-    private void MakeTheTradeRequest(double difference, double exchangePercent)
+    //this is called by the traders, since they can either sell or buy
+    //passing the variables as references is impossible in java T_T -> created new class called Exchange
+    protected void CalculateNormalInfluences(Exchange exchange)
+    {
+
+        //change the difference and the percentage values slightly, based on events, buying and selling trends, and people leaving or joining
+
+
+    }
+
+    private void MakeTheTradeRequest(Exchange exchange)
     {
         //double feePercent = random.nextDouble(5)+2;
-        double feePercent = random.nextDouble(0.05)+0.02; //feePercent is a random value between 2 and 7
+        double feePercent = random.nextDouble(0.05)+0.02; //feePercent is a random between 2 and 7
 
         //calculate the actual amount based on difference and exchangePercent
 
-
-        if(difference > 0)
-            RequestToBuy(difference);
+        if(exchange.difference > 0)
+            RequestToBuy(exchange.difference);
         else
-            RequestToSell(difference * (1-feePercent), difference * feePercent);
+            RequestToSell(exchange.difference * (1-feePercent), exchange.difference * feePercent);
     }
 
     public void RequestToBuy(double amount)

@@ -32,9 +32,17 @@ public class MinerGUI extends AnchorPane {
     @FXML
     private Label hashLabel;
 
+    @FXML
+    private Label miningPowerLabel;
+
     public void setProfilePicture(Image image)
     {
         minerPp.setImage(image);
+    }
+
+    public void SetMiningPowerLabel(String powerString)
+    {
+        miningPowerLabel.setText(powerString);
     }
 
     public void SetHashText(String hash)
