@@ -387,7 +387,27 @@
                   </ImageView>
                </graphic>
           </Tab>
-          <Tab fx:id="graphView" text="Graph View">
+            <Tab fx:id="graphView1" text="Blockchain View">
+               <content>
+                  <ScrollPane fx:id="BlockchainViewScroll" pannable="true" vbarPolicy="NEVER">
+                     <content>
+                        <TilePane fx:id="BlockchainViewTile" alignment="CENTER" minHeight="1000.0" minWidth="1920.0" nodeOrientation="LEFT_TO_RIGHT" prefColumns="10" prefRows="1" prefTileHeight="500.0" prefTileWidth="300.0" style="-fx-background-color: #1e1f22;">
+                           <padding>
+                              <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                           </padding>
+                        </TilePane>
+                     </content>
+                  </ScrollPane>
+               </content>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Icons/graphview_icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Tab>
+          <Tab fx:id="graphView" disable="true" text="Graph View">
                <content>
                   <ScrollPane fx:id="graphViewScroll" pannable="true">
                      <content>
