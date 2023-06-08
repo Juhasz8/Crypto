@@ -247,12 +247,18 @@ public class SimulationManager implements Runnable
         //we will decide the miner and trader type here, and not in the miner and trader constructor.
         for (int i = 0; i < minerAmountToJoin; i++)
         {
+            if(Network.getInstance().GetMinerAmount() == 60)
+                break;
+
             Miner newMiner = new Miner(MinerType.HUGE_CORP, GetMinerSleepingTime(MinerType.HUGE_CORP));
             newMiner.start();
         }
 
         for (int i = 0; i < traderAmountToJoin; i++)
         {
+            if(Network.getInstance().GetTraderAmount() == 60)
+                break;
+
             Trader newTrader = new Trader(TraderType.RISK_APPETITE);
             newTrader.start();
         }
