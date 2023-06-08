@@ -1,5 +1,7 @@
 package com.example.poof_ui.Blockchain_Side;
 
+import com.example.poof_ui.TrustedBlocksGUI;
+
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 
@@ -23,9 +25,13 @@ public class FullNode
 
     public FullNode()
     {
-
+        TrustedBlocksGUI TrustedBlocksGUI = new TrustedBlocksGUI();
+        //TrustedBlocksGUI.setPreviousHash();
+        //TrustedBlocksGUI.setHashNumber();
+        //TrustedBlocksGUI.setBlockNumber();
+        //TrustedBlocksGUI.setMinersPublicKey();
+        //TrustedBlocksGUI.setMerkleRoot();
     }
-
     public String GetLastTrustedBlockHash()
     {
         if(lastTrustedBlock == null)
