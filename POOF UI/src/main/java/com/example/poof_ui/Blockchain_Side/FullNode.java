@@ -31,7 +31,7 @@ public class FullNode
         //TrustedBlocksGUI.setBlockNumber();
         //TrustedBlocksGUI.setMinersPublicKey();
         //TrustedBlocksGUI.setMerkleRoot();
-        //Hello d
+        //Hello diego
     }
     public String GetLastTrustedBlockHash()
     {
