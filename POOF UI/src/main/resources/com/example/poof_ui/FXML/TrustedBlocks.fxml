@@ -8,7 +8,6 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="500.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <SVGPath content="M0,0 L10,5 L0,10 Z" fill="#3474f0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0" />
@@ -20,13 +19,13 @@
                      <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="383.0" style="-fx-background-color: #42454a;" text="Block Number:" textFill="WHITE">
                            <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                            <font>
-                              <Font name="Arial" size="13.0" />
+                              <Font name="Arial" size="10.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="383.0" style="-fx-background-color: #3474f0;" text="293" textFill="WHITE">
+                        <Label fx:id="blockNumber" alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="383.0" style="-fx-background-color: #3474f0;" text="293" textFill="WHITE">
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
@@ -36,13 +35,45 @@
                         </Label>
                         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="383.0" style="-fx-background-color: #42454a;" text="Hash Number:" textFill="WHITE">
                            <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font name="Arial" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="hashNumber" alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="383.0" style="-fx-background-color: #3474f0;" text="9a9a9hah92392994945" textFill="WHITE">
+                           <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                            <font>
                               <Font name="Arial" size="13.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="383.0" style="-fx-background-color: #3474f0;" text="9a9a9hah92392994945" textFill="WHITE">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="383.0" style="-fx-background-color: #42454a;" text="Miner's Public Key:" textFill="WHITE">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font name="Arial" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="minersPublicKey" alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="383.0" style="-fx-background-color: #3474f0;" text="9a9a9hah92392994945" textFill="WHITE">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                           <font>
+                              <Font name="Arial" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="383.0" style="-fx-background-color: #42454a;" text="Merkle Root:" textFill="WHITE">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font name="Arial" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="merkleRoot" alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="383.0" style="-fx-background-color: #3474f0;" text="9a9a9hah92392994945" textFill="WHITE">
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
@@ -65,7 +96,7 @@
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="308.0" prefWidth="279.0" />
                     </content>
                   </ScrollPane>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="383.0" style="-fx-background-color: #42454a;" text="92u8fh8fh38fh393jf39f" textFill="WHITE">
+                  <Label fx:id="previousHash" alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="383.0" style="-fx-background-color: #42454a;" text="92u8fh8fh38fh393jf39f" textFill="WHITE">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
