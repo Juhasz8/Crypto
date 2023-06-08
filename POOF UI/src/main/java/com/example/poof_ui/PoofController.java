@@ -24,7 +24,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -189,16 +188,24 @@ public class PoofController implements Initializable {
         Platform.runLater(() -> minerGUI.SetMiningPowerLabel(powerString));
     }
 
-    public void ChangeMinerGUIhash(MinerGUI minerGUI, String hash)
+    public void SetMinerGUIHash(MinerGUI minerGUI, String hash)
     {
-        Platform.runLater(() -> minerGUI.SetHashText(hash));
+        Platform.runLater(() -> minerGUI.SetHashLabel(hash));
     }
 
-    public void AddTraderGUI()
+    public void SetMinerGUICoin(MinerGUI minerGUI, String coin)
     {
-        // Add traders
-        TraderGUI traderGUI = new TraderGUI();
+        Platform.runLater(() -> minerGUI.SetCoinLabel(coin));
+    }
+
+    public void AddTraderGUI(TraderGUI traderGUI)
+    {
         Platform.runLater(() -> tradersTile.getChildren().add(traderGUI));
+    }
+
+    public void SetTraderGUICoin(TraderGUI traderGUI, String coin)
+    {
+        Platform.runLater(() -> traderGUI.SetCoinLabel(coin));
     }
 
     public void updateMarketPriceLabel(String Price){

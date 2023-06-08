@@ -7,9 +7,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 public class MinerGUI extends AnchorPane {
 
     public MinerGUI() {
@@ -35,6 +32,9 @@ public class MinerGUI extends AnchorPane {
     @FXML
     private Label miningPowerLabel;
 
+    @FXML
+    private Label CoinLabel;
+
     public void setProfilePicture(Image image)
     {
         minerPp.setImage(image);
@@ -45,8 +45,13 @@ public class MinerGUI extends AnchorPane {
         miningPowerLabel.setText(powerString);
     }
 
-    public void SetHashText(String hash)
+    public void SetHashLabel(String hash)
     {
         hashLabel.setText(hash);
+    }
+
+    public void SetCoinLabel(String coin)
+    {
+        CoinLabel.setText(coin);
     }
 }

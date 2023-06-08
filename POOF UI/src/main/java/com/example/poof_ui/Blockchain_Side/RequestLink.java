@@ -8,4 +8,5 @@ public class RequestLink
     public int cycleSellingRequestAmount;
     public int cycleBuyingRequestAmount;
 
+    public RequestLink previous;
 }

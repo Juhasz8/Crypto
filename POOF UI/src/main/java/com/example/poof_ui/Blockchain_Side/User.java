@@ -19,8 +19,9 @@ public class User extends Thread
     private PrivateKey privateKey;
 
     //the amount of Puff you own
-    private double poofWallet = 0;
-    private double euroWallet = 0;
+    protected double poofWallet = 0;
+    protected double hypotheticalPoofWallet = 0;
+    protected double euroWallet = 0;
 
     protected boolean isSuspended = false;
 
@@ -30,6 +31,7 @@ public class User extends Thread
     //for rounding numbers up to 2 decimal
     protected DecimalFormat decFormatter = new DecimalFormat("0.0");
 
+    protected int cycleUntilPossibleNextExchange;
 
     public User()
     {
@@ -74,7 +76,9 @@ public class User extends Thread
             System.out.println(name + ": My wallet got increased (+" + amount +")");
         else
             System.out.println(name + ": My wallet got decreased (" + amount +")");
+
         poofWallet += amount;
+        hypotheticalPoofWallet += amount;
     }
 
     public double GetWallet()

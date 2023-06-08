@@ -15,5 +15,6 @@
             <Font size="8.0" />
          </font></Label>
       <Label fx:id="miningPowerLabel" alignment="TOP_CENTER" layoutX="25.0" layoutY="99.0" prefHeight="58.0" prefWidth="90.0" text="Power" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+      <Label fx:id="CoinLabel" alignment="TOP_CENTER" layoutX="25.0" layoutY="53.0" prefHeight="58.0" prefWidth="90.0" text="Coin" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
    </children>
 </AnchorPane>

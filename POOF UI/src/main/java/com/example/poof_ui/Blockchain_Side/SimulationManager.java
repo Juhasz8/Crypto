@@ -30,7 +30,9 @@ public class SimulationManager implements Runnable
     public RequestLink requestLinkHead = new RequestLink();
 
     //the requests that happened in the 5th last update cycle
-    private RequestLink requestLinkTail;
+    public RequestLink requestLinkTail;
+
+    public float previousMarketPrice;
 
     //getters for the total values
     public int GetSellingRequestAmount()
@@ -56,6 +58,16 @@ public class SimulationManager implements Runnable
         return sum;
     }
 
+    public int GetBuyingRequestAmountDifference()
+    {
+        return requestLinkHead.cycleBuyingRequestAmount - requestLinkHead.previous.cycleBuyingRequestAmount;
+    }
+
+    public int GetSellingRequestAmountDifference()
+    {
+        return requestLinkHead.cycleSellingRequestAmount - requestLinkHead.previous.cycleSellingRequestAmount;
+    }
+
     //called in the update loop
     private void UpdateRequestListening()
     {
@@ -72,13 +84,13 @@ public class SimulationManager implements Runnable
         }
         else
         {
-            //if we only have the head, the tail will point there too
             if(currentListLength == 1)
                 requestLinkTail = requestLinkHead;
 
             //adding new element and setting the head point there
             RequestLink newHead = new RequestLink();
             requestLinkHead.next = newHead;
+            newHead.previous = requestLinkHead;
             requestLinkHead = newHead;
 
             //we increment the length
@@ -105,8 +117,8 @@ public class SimulationManager implements Runnable
         miner2.start();
 
 
-        Miner miner3 = new Miner(MinerType.HUGE_CORP, GetMinerSleepingTime(MinerType.HUGE_CORP));
-        miner3.start();
+        //Miner miner3 = new Miner(MinerType.HUGE_CORP, GetMinerSleepingTime(MinerType.HUGE_CORP));
+        //miner3.start();
     }
 
     public void run()
@@ -145,27 +157,112 @@ public class SimulationManager implements Runnable
         //decide how many miner will join
         //depends on the amount of miners currently on the market, and the value of the currency and some random factor
 
-
         //decide how many trader will join
         //depends on the amount of traders currently on the market, and the value of the currency and some random factor
         //1 + 1/(n+1)
         if(Network.getInstance().GetTraderAmount() == 0)
         {
-            Trader myGuy = new Trader(TraderType.RISK_APPETITE);
-            myGuy.start();
+            TraderType typeToJoin;
+            //50% chance that a risk appetite trader joins
+            if(random.nextInt(2) == 0)
+                typeToJoin = TraderType.RISK_APPETITE;
+            else//50% chance that a psychopath trader joins
+                typeToJoin = TraderType.PSYCHOPATH;
+
+            //join the first trader to the simulation
+            Trader firstTrader = new Trader(typeToJoin);
+            firstTrader.start();
+            //return cause in this cycle only this trader should join
+            return;
         }
 
+        //if the marketprice went up people are more likely to join
+        float priceDifference = marketPrice - previousMarketPrice;
+        int minerAmountToJoin = 0;
+        int traderAmountToJoin = 0;
 
-        //we will decide the miner and trader type here, and not in the miner and trader constructor.
-        //and the constructor asks for a miner or trader type parameter
+        if(priceDifference > 0)
+        {
+            //since market price went up, more people will be joining
+
+
+            //there is a 20% chance that no miners join, otherwise there will be 1-2 miners joining, and even more if the market price increase is above 50%
+            if(random.nextInt(5) != 0)
+            {
+                //if the market price increase is above 50%
+                if((previousMarketPrice / marketPrice) * 100 > 50)
+                {
+                    //there will be more miner and trader joining
+
+                    //20%chance that no miners join
+                    if(random.nextInt(5) != 0)
+                        minerAmountToJoin += (int)(Network.getInstance().GetMinerAmount() / 5) + random.nextInt(2)+1;
+
+                    //20%chance that no traders join
+                    if(random.nextInt(5) != 0)
+                        traderAmountToJoin += (int)(Network.getInstance().GetTraderAmount() / 5) + random.nextInt(2)+1;
+                }
+                else
+                {
+                    //there will be less miner and trader joining
+
+                    //20%chance that no miners join
+                    if(random.nextInt(5) != 0)
+                        minerAmountToJoin += (int)(Network.getInstance().GetMinerAmount() / 10) + random.nextInt(1)+0;
+
+                    //20%chance that no traders join
+                    if(random.nextInt(5) != 0)
+                        traderAmountToJoin += (int)(Network.getInstance().GetTraderAmount() / 10) + random.nextInt(1)+0;
+
+                }
+            }
+
+        }
+        else
+        {
+            ///since market price went down, less people will be joining
+
+            //if the market price decrease is less than 25%
+            if((marketPrice / previousMarketPrice) * 100 < 25)
+            {
+                //there will be more miner and trader joining
+
+                //50%chance that no miners join
+                if(random.nextInt(2) != 0)
+                    minerAmountToJoin += (int)(Network.getInstance().GetMinerAmount() / 20) + random.nextInt(1)+0;
+
+                //50%chance that no traders join
+                if(random.nextInt(2) != 0)
+                    traderAmountToJoin += (int)(Network.getInstance().GetTraderAmount() / 20) + random.nextInt(1)+0;
+            }
+
+            //otherwise some people are leaving ?
+
+        }
+
+        //when determining the trader type, if priceDifference < 0, psychopaths and risky traders are more likely to join
+
 
         //join the traders and miners to the network
+        //we will decide the miner and trader type here, and not in the miner and trader constructor.
+        for (int i = 0; i < minerAmountToJoin; i++)
+        {
+            Miner newMiner = new Miner(MinerType.HUGE_CORP, GetMinerSleepingTime(MinerType.HUGE_CORP));
+            newMiner.start();
+        }
+
+        for (int i = 0; i < traderAmountToJoin; i++)
+        {
+            Trader newTrader = new Trader(TraderType.RISK_APPETITE);
+            newTrader.start();
+        }
 
 
     }
 
     private void DetermineMarketPrice()
     {
+        previousMarketPrice = marketPrice;
         float marketPriceChange = 0;
 
         //before the first block was mined, the market price stays at 0
@@ -176,18 +273,49 @@ public class SimulationManager implements Runnable
         //based on their amounts, we change the value of market price
 
         //if(Network.getInstance().networkUsers.size() > 1)
-        System.out.println("...................");
-        System.out.println("all selling requests last 5 cycles: " + GetSellingRequestAmount());
-        System.out.println("all buying requests last 5 cycles: " + GetBuyingRequestAmount());
-        System.out.println("...................");
 
 
-        if(marketPrice == 0)
+        if (marketPrice == 0)
         {
-            marketPriceChange += random.nextFloat(10);
+            marketPriceChange += random.nextFloat(2) + 0.5; //random number between 0.5 and 2.5
         }
+        else if(Network.getInstance().networkUsers.size() < 5)
+            marketPriceChange += random.nextFloat(5) - 2.5; //random number between -2.5 and 2.5
         else
-            marketPriceChange += random.nextFloat(20) - 10;
+            marketPriceChange += random.nextFloat(20) - 10; //random number between -10 and 10
+
+        // GetBuyingRequestAmountDifference and GetSellingRequestAmountDifference return a pos number if more requests were made this cycle.
+
+        //when there are more buying requests, t
+        //marketPrice += GetBuyingRequestAmountDifference() * random.nextFloat();
+
+        //marketPrice -= GetSellingRequestAmountDifference() * random.nextFloat();
+
+        int buyerSellerDifference = requestLinkHead.cycleBuyingRequestAmount - requestLinkHead.cycleSellingRequestAmount;
+        int totalRequests = requestLinkHead.cycleBuyingRequestAmount + requestLinkHead.cycleSellingRequestAmount;
+
+        System.out.println("...................");
+        System.out.println("selling requests last cycle: " + requestLinkHead.cycleSellingRequestAmount);
+        System.out.println("buying requests last cycle: " + requestLinkHead.cycleBuyingRequestAmount);
+        System.out.println("buyerSellerDifference: " + buyerSellerDifference);
+        System.out.println("...................");
+
+        /*
+        //if more people are trying to buy than sell the market price decreases
+        if(requestLinkHead.cycleBuyingRequestAmount > requestLinkHead.cycleSellingRequestAmount)
+            marketPrice += (buyerSellerDifference) * (1+marketPrice/100) * (random.nextFloat(0.75f)+0.75);
+        //otherwise increases
+        else
+            marketPrice += (buyerSellerDifference) * (1+marketPrice/100) * (random.nextFloat(0.75f)+0.75);
+        */
+        if(buyerSellerDifference < -5 && (requestLinkHead.cycleBuyingRequestAmount/totalRequests) * 100 < 20)
+            marketPriceChange += (buyerSellerDifference) * (1+marketPrice/100) * (random.nextFloat(0.75f)+0.75);
+        else if (buyerSellerDifference != 0)
+            marketPriceChange += buyerSellerDifference * (1+marketPrice/50) * (random.nextFloat(0.75f)+0.75);
+        else if (totalRequests > 10)
+            marketPriceChange += totalRequests/10 * (1+marketPrice/50) * (random.nextFloat(0.75f)+0.75);
+
+
         marketPrice += marketPriceChange;
 
         if(marketPrice < 0)
@@ -236,8 +364,8 @@ public class SimulationManager implements Runnable
         else if(minerType == MinerType.SMALL_CORP)
             return random.nextLong(100)+50;
         else if(minerType == MinerType.HUGE_CORP)
-            //return random.nextLong(10)+10;
-            return 30;
+            return random.nextLong(10)+10;
+            //return 30;
 
         System.out.println("Something went wrong! Non-existing MinerType!");
         return random.nextLong(100)+50;

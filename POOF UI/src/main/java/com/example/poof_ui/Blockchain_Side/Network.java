@@ -142,8 +142,6 @@ public class Network
     {
         //store the request in the network
         sellingRequests.add(request);
-        //increment the cycle request amount
-        SimulationManager.getInstance().requestLinkHead.cycleSellingRequestAmount++;
 
         TryToMatch();
     }
@@ -185,5 +183,10 @@ public class Network
     public int GetTraderAmount()
     {
         return traders.size();
+    }
+
+    public int GetMinerAmount()
+    {
+        return miners.size();
     }
 }

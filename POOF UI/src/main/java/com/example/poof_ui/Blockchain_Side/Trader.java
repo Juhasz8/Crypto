@@ -1,6 +1,7 @@
 package com.example.poof_ui.Blockchain_Side;
 
 import com.example.poof_ui.PoofController;
+import com.example.poof_ui.TraderGUI;
 
 import java.util.Random;
 
@@ -11,12 +12,17 @@ public class Trader extends User
 
     public TraderType type;
 
+    private TraderGUI traderGUI;
+
     public Trader(TraderType type)
     {
         super();
         this.type = type;
         Network.getInstance().JoinTraderToTheNetwork(this);
-        PoofController.getInstance().AddTraderGUI();
+
+        traderGUI = new TraderGUI();
+        PoofController.getInstance().SetTraderGUICoin(traderGUI, decFormatter.format(0));
+        PoofController.getInstance().AddTraderGUI(traderGUI);
     }
 
     public void run()
@@ -29,6 +35,9 @@ public class Trader extends User
                 {
                     if (isSuspended)
                         wait();
+
+                    if(cycleUntilPossibleNextExchange > 0)
+                        cycleUntilPossibleNextExchange--;
 
                     DecideWhetherToBuyOrSell();
 
@@ -44,8 +53,8 @@ public class Trader extends User
 
     private void DecideWhetherToBuyOrSell()
     {
-        //there is a 20% chance that the trader won't sell or buy anything
-        if(random.nextInt(5) == 0)
+        //there is a 10% chance that the trader won't sell or buy anything
+        if(cycleUntilPossibleNextExchange > 0 || random.nextInt(10) == 0)
             return;
 
         Exchange exchange = new Exchange();
@@ -132,9 +141,21 @@ public class Trader extends User
     //passing the variables as references is impossible in java T_T -> created new class called Exchange
     protected void CalculateNormalInfluences(Exchange exchange)
     {
+        //if there are only a few traders, they are more very likely to buy
+        if(Network.getInstance().GetTraderAmount() == 1)
+        {
+            exchange.difference += 35;
+            //they buy between 60% and 100%
+            exchange.percent = random.nextDouble(0.4)+0.6;
+        }
+        else if(Network.getInstance().GetMinerAmount() < 5)
+        {
+            //they buy between 40% and 100%
+            exchange.percent = random.nextDouble(0.4)+0.6;
+        }
+
 
         //change the difference and the percentage values slightly, based on events, buying and selling trends, and people leaving or joining
-
 
     }
 
@@ -147,8 +168,18 @@ public class Trader extends User
 
         if(exchange.difference > 0)
             RequestToBuy(exchange.difference);
-        else
-            RequestToSell(exchange.difference * (1-feePercent), exchange.difference * feePercent);
+        else if (hypotheticalPoofWallet > 0)
+        {
+            RequestToSell(exchange.difference * (1 - feePercent), exchange.difference * feePercent);
+
+
+            //increment the cycle request amount
+            //we do this here because the miner class uses the same RequestToSell method in the User and overriding would be tricky
+            SimulationManager.getInstance().requestLinkHead.cycleSellingRequestAmount++;
+        }
+
+        //this trader won't trade for the next 1-3 turns (2-6 sec)
+        cycleUntilPossibleNextExchange = random.nextInt(3)+1;
     }
 
     public void RequestToBuy(double amount)
@@ -163,6 +194,13 @@ public class Trader extends User
         {
             System.out.println(e);
         }
+    }
+
+    @Override
+    public void IncreaseWallet(double amount)
+    {
+        super.IncreaseWallet(amount);
+        PoofController.getInstance().SetTraderGUICoin(traderGUI, decFormatter.format(poofWallet));
     }
 
 }

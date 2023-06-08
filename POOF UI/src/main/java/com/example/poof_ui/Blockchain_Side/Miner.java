@@ -72,6 +72,7 @@ public class Miner extends User
         }
 
         minerGUI = new MinerGUI();
+        PoofController.getInstance().SetMinerGUICoin(minerGUI, decFormatter.format(0));
         PoofController.getInstance().AddMinerGUI(minerGUI, decFormatter.format(miningPower));
     }
 
@@ -138,7 +139,12 @@ public class Miner extends User
                     while(isSuspended)
                         wait();
 
+                    if(cycleUntilPossibleNextExchange > 0)
+                        cycleUntilPossibleNextExchange--;
+
                     TryToMine();
+                    DecideToSell();
+                    //DecideToSell();
                     //System.out.println("check");
                     //Thread.sleep((1/miningPower) * 1000);
                     //Thread.currentThread().wait((long)0.25);
@@ -160,7 +166,7 @@ public class Miner extends User
 
         //System.out.println("Tried to mine, result: " + hash);
         //minerGUI.SetHashText(hash);
-        PoofController.getInstance().ChangeMinerGUIhash(minerGUI, hash);
+        PoofController.getInstance().SetMinerGUIHash(minerGUI, hash);
 
         if(hash.substring(0, Network.getInstance().GetDifficulty()).equals(target))
         {
@@ -322,30 +328,40 @@ public class Miner extends User
     private void DecideToSell()
     {
         //if it's not the first transaction, there is a 10% chance that the miner wont sell anything
-        if(random.nextInt(10) == 0)
+        //if he recently sold he is on a break
+        //if he has no poof-s he won't even think about selling
+        if(cycleUntilPossibleNextExchange > 0 || hypotheticalPoofWallet == 0 || random.nextInt(10) == 0)
             return;
 
         Exchange exchange = new Exchange();
 
         if(type == MinerType.THAT_ONE_GUY)
         {
+            //random difference between -100 and 10
+            exchange.difference = random.nextInt(110)-100;
 
         }
         else if (type == MinerType.THESE_GUYS)
         {
-
+            //random difference between -75 and 10
+            exchange.difference = random.nextInt(85)-75;
         }
         else if (type == MinerType.GROUP)
         {
-
+            //random difference between -50 and 10
+            exchange.difference = random.nextInt(60)-50;
         }
         else if (type == MinerType.SMALL_CORP)
         {
-
+            //random difference between -35 and 10
+            exchange.difference = random.nextInt(45)-35;
         }
         else if (type == MinerType.HUGE_CORP)
         {
-
+            //random difference between -25 and 10
+            exchange.difference = random.nextInt(35)-25;
+            //selling between 15% and 50%
+            exchange.percent = random.nextDouble(0.35)+0.15;
         }
 
 
@@ -363,8 +379,8 @@ public class Miner extends User
         {
             //completely random behaviour
 
-            //random difference between -100 and 100
-            exchange.difference = random.nextInt(200)-100;
+            //random difference between -100 and 25
+            exchange.difference = random.nextInt(150)-125;
             //will deal with 5-95% of his current currency
             exchange.percent = random.nextDouble(.9)+0.05;
         }
@@ -378,7 +394,21 @@ public class Miner extends User
     //this is called by the miners since they can only sell
     protected void CalculateNormalSellingInfluences(Exchange exchange)
     {
-        //if there are only a few miners, they are more likely to sell then at a later point when there will be more miners
+        //if there are only a few miners, they are more likely to sell than at a later point when there will be more miners
+        if(Network.getInstance().GetMinerAmount() < 3)
+        {
+            exchange.difference -= 35;
+            //they sell between 60% and 100% of their puff
+            exchange.percent = random.nextDouble(0.4)+0.6;
+        }
+        else if(Network.getInstance().GetMinerAmount() < 10)
+        {
+            exchange.difference -= 20;
+            //they sell between 60% and 100% of their puff
+            exchange.percent = random.nextDouble(0.4)+0.6;
+        }
+
+        //event influences
 
     }
 
@@ -387,7 +417,21 @@ public class Miner extends User
         //double feePercent = random.nextDouble(5)+2;
         double feePercent = random.nextDouble(0.05)+0.02; //feePercent is a random between 2 and 7
 
+        double amountToSell = hypotheticalPoofWallet * Math.max((exchange.percent+(exchange.difference/10)), 1);
+
+        System.out.println("I AM A MINER AND I REQUESTED TO SELL: " + amountToSell);
         //calculate the actual amount based on difference and exchangePercent
-        RequestToSell(exchange.difference * (1-feePercent), exchange.difference * feePercent);
+        RequestToSell(amountToSell * (1-feePercent), amountToSell * feePercent);
+
+        hypotheticalPoofWallet -= amountToSell;
+        //this miner won't sell for the next 1-3 turns (2-6 sec)
+        cycleUntilPossibleNextExchange = random.nextInt(3)+1;
+    }
+
+    @Override
+    public void IncreaseWallet(double amount)
+    {
+        super.IncreaseWallet(amount);
+        PoofController.getInstance().SetMinerGUICoin(minerGUI, decFormatter.format(poofWallet));
     }
 }
