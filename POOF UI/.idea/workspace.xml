@@ -4,7 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0633ccdd-c8a9-41e1-b7ca-fe80465610ca" name="Changes" comment="" />
+    <list default="true" id="0633ccdd-c8a9-41e1-b7ca-fe80465610ca" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/POOF UI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/POOF UI.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/poof_ui/Blockchain_Side/FullNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/poof_ui/Blockchain_Side/FullNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/poof_ui/Blockchain_Side/Miner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/poof_ui/Blockchain_Side/Miner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/poof_ui/Blockchain_Side/TrustedBlocksGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/poof_ui/Blockchain_Side/TrustedBlocksGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/poof_ui/PoofController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/poof_ui/PoofController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/poof_ui/TransactionBlock.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/poof_ui/FXML/Poof-Interface.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/poof_ui/FXML/Poof-Interface.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/poof_ui/FXML/TransactionBlock.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/poof_ui/FXML/TrustedBlocks.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/poof_ui/FXML/TrustedBlocks.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/poof_ui/PoofController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/poof_ui/PoofController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/poof_ui/PoofInterface.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/poof_ui/PoofInterface.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/module-info.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/module-info.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/styling.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/styling.css" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,6 +27,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2QwUsTLWreWFdDLPd1bnsikoxRB" />
   <component name="ProjectViewState">
@@ -23,7 +41,7 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/Juhász/Crypto/POOF UI",
+    "last_opened_file_path": "/Users/diegovelotto/Documents/GitHub/Crypto/POOF UI",
     "project.structure.last.edited": "SDKs",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2"
@@ -39,5 +57,16 @@
       <updated>1686264344609</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

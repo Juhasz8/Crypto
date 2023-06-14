@@ -208,7 +208,6 @@ public class Miner extends User
             Signature signature = Signature.getInstance("SHA256withRSA");
             signature.initVerify(signedTransaction.seller.publicKey);
             signature.update(signedTransaction.originalMessage);
-
             boolean isCorrect = signature.verify(signedTransaction.signedMessage);
 
             return isCorrect;

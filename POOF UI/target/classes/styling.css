@@ -142,9 +142,9 @@
 }
 
 .scroll-pane > .scroll-bar:vertical > .thumb {
-    -fx-background-color: #0466c8; /* Set vertical scrollbar thumb color */
+    -fx-background-color: #1e1f22; /* Set vertical scrollbar thumb color */
 }
 
 .scroll-pane > .scroll-bar:horizontal > .thumb {
-    -fx-background-color: #0466c8; /* Set horizontal scrollbar thumb color */
+    -fx-background-color: #1e1f22; /* Set horizontal scrollbar thumb color */
 }

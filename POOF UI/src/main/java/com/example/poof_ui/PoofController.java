@@ -39,8 +39,6 @@ public class PoofController implements Initializable {
     @FXML
     private VBox currentEvents;
     @FXML
-    private Tab graphView;
-    @FXML
     private ScrollPane currentEventsScroll;
     @FXML
     private Button buttonBuy;
@@ -52,8 +50,6 @@ public class PoofController implements Initializable {
     private ImageView play_image;
     @FXML
     private Button play_button;
-    @FXML
-    private ScrollPane graphViewScroll;
     @FXML
     private LineChart<?, ?> lineChart;
     @FXML
@@ -70,6 +66,9 @@ public class PoofController implements Initializable {
 
     @FXML
     private Label marketPercentage;
+
+    @FXML
+    private TilePane BlockchainViewTile;
 
     // Chart data
     private XYChart.Series series1;
@@ -119,10 +118,6 @@ public class PoofController implements Initializable {
             label_Months.setText(String.valueOf(monthsPassed));
             label_Weeks.setText(String.valueOf(weeksPassed));
 
-            // Add transaction blocks
-            TransactionBlock transactionBlock = new TransactionBlock();
-            blockchain_Tile.getChildren().add(transactionBlock);
-
             if(eventIndex == 1)
             {
                 PotentiallyMakeEvent();
@@ -135,10 +130,6 @@ public class PoofController implements Initializable {
 
         // Set the timeline to repeat 500 times (10 minutes)
         timeline.setCycleCount(500);
-
-        // Initialize UI elements
-        graphViewScroll.setHvalue(0.5);
-        graphViewScroll.setVvalue(0.5);
 
     }
 
@@ -179,6 +170,17 @@ public class PoofController implements Initializable {
         isPlaying = !isPlaying;
     }
 
+    public void AddTrustedBlockGUI(com.example.poof_ui.TrustedBlocksGUI trustedBlocksGUI, String blockNumber,
+                                   String previousHash)
+    {
+        // Add a trusted block
+        Platform.runLater(() -> BlockchainViewTile.getChildren().add(trustedBlocksGUI));
+        Platform.runLater(() -> trustedBlocksGUI.setBlockNumber(blockNumber));
+        //Platform.runLater(() -> trustedBlocksGUI.setHashNumber());
+        //Platform.runLater(() -> trustedBlocksGUI.setMinersPublicKey());
+        //Platform.runLater(() -> trustedBlocksGUI.setMerkleRoot());
+        Platform.runLater(() -> trustedBlocksGUI.setPreviousHash(previousHash));
+    }
     public void AddMinerGUI(MinerGUI minerGUI, String powerString)
     {
         // Add miners

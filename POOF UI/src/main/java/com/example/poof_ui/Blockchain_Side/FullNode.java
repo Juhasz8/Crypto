@@ -1,5 +1,6 @@
 package com.example.poof_ui.Blockchain_Side;
 
+import com.example.poof_ui.PoofController;
 import com.example.poof_ui.TrustedBlocksGUI;
 
 import java.util.ArrayList;
@@ -25,13 +26,7 @@ public class FullNode
 
     public FullNode()
     {
-        TrustedBlocksGUI TrustedBlocksGUI = new TrustedBlocksGUI();
-        //TrustedBlocksGUI.setPreviousHash();
-        //TrustedBlocksGUI.setHashNumber();
-        //TrustedBlocksGUI.setBlockNumber();
-        //TrustedBlocksGUI.setMinersPublicKey();
-        //TrustedBlocksGUI.setMerkleRoot();
-        //Hello diego
+
     }
     public String GetLastTrustedBlockHash()
     {
@@ -163,6 +158,12 @@ public class FullNode
     {
         lastTrustedBlock = fullNodeblock;
         fullNodeblock.block.isTrusted = true;
+
+        String previousHash = GetLastTrustedBlockHash();
+
+        TrustedBlocksGUI TrustedBlocksGUI = new TrustedBlocksGUI();
+        PoofController.getInstance().AddTrustedBlockGUI(TrustedBlocksGUI, String.valueOf(lastTrustedBlockIndex)
+                , previousHash);
 
         //we basically do all the transactions on this block ledger
         //so everyone gets his money and poffcoin, and the miner gets the rewards and fee aswell

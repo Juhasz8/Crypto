@@ -8,7 +8,7 @@ import javafx.scene.layout.AnchorPane;
 public class TrustedBlocksGUI extends AnchorPane {
 
     public TrustedBlocksGUI() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TrustedBlocks.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXML/TrustedBlocks.fxml"));
         fxmlLoader.setController(this);
 
         try {
