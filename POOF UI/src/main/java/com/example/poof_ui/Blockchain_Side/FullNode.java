@@ -161,9 +161,13 @@ public class FullNode
 
         String previousHash = GetLastTrustedBlockHash();
 
-        TrustedBlocksGUI TrustedBlocksGUI = new TrustedBlocksGUI();
-        PoofController.getInstance().AddTrustedBlockGUI(TrustedBlocksGUI, String.valueOf(lastTrustedBlockIndex)
-                , previousHash);
+        TrustedBlocksGUI trustedBlocksGUI = new TrustedBlocksGUI();
+        trustedBlocksGUI.setPreviousHash(previousHash);
+        //trustedBlocksGUI.setHashNumber(fullNodeBlock.block.hash);
+        //trustedBlocksGUI.setMinersPublicKey(fullNodeBlock.luckyMinerPublicKey);
+        //trustedBlocksGUI.setMerkleRoot(fullNodeBlock.block.GetMerkleRoot());
+        trustedBlocksGUI.setBlockNumber(String.valueOf(blockChains.size()-1));
+        PoofController.getInstance().AddTrustedBlockGUI(trustedBlocksGUI);
 
         //we basically do all the transactions on this block ledger
         //so everyone gets his money and poffcoin, and the miner gets the rewards and fee aswell

@@ -48,8 +48,5 @@ public class TrustedBlocksGUI extends AnchorPane {
     {
         merkleRoot.setText(merkleRootString);
     }
-    public void setPreviousHash(String previousHashString)
-    {
-        previousHash.setText(previousHashString);
-    }
+    public void setPreviousHash(String previousHashString) { previousHash.setText(previousHashString);}
 }

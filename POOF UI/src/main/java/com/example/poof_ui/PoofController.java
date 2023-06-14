@@ -7,7 +7,10 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import com.example.poof_ui.Blockchain_Side.FullNode;
+import com.example.poof_ui.Blockchain_Side.FullNodeBlock;
 import com.example.poof_ui.Blockchain_Side.SimulationManager;
+import com.example.poof_ui.TrustedBlocksGUI;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -170,16 +173,10 @@ public class PoofController implements Initializable {
         isPlaying = !isPlaying;
     }
 
-    public void AddTrustedBlockGUI(com.example.poof_ui.TrustedBlocksGUI trustedBlocksGUI, String blockNumber,
-                                   String previousHash)
+    public void AddTrustedBlockGUI(TrustedBlocksGUI trustedBlocksGUI)
     {
         // Add a trusted block
         Platform.runLater(() -> BlockchainViewTile.getChildren().add(trustedBlocksGUI));
-        Platform.runLater(() -> trustedBlocksGUI.setBlockNumber(blockNumber));
-        //Platform.runLater(() -> trustedBlocksGUI.setHashNumber());
-        //Platform.runLater(() -> trustedBlocksGUI.setMinersPublicKey());
-        //Platform.runLater(() -> trustedBlocksGUI.setMerkleRoot());
-        Platform.runLater(() -> trustedBlocksGUI.setPreviousHash(previousHash));
     }
     public void AddMinerGUI(MinerGUI minerGUI, String powerString)
     {
